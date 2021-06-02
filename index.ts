@@ -74,11 +74,11 @@ export interface ConfigOutput {
 
 export { assign, config, load, parse };
 
-const snackables = {
+const env = {
   assign,
   config,
   load,
   parse
 };
 
-export default snackables;
+export default env;

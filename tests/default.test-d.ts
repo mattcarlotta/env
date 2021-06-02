@@ -1,11 +1,11 @@
 import { expectType } from "tsd";
-import snackables from "snackables";
-import type { ConfigOptions, ParsedEnvs, ProcessEnv } from "snackables";
+import env from "@noshot/env";
+import type { ConfigOptions, ParsedEnvs, ProcessEnv } from "@noshot/env";
 
-const env = snackables.config();
-expectType<string>(env.parsed["ROOT"]);
+const result = env.config();
+expectType<string>(result.parsed["ROOT"]);
 
-const { parsed, extracted } = snackables.config({
+const { parsed, extracted } = env.config({
   dir: "tests",
   paths: ".env-example",
   encoding: "utf8",
@@ -17,13 +17,13 @@ expectType<string>(parsed["BASE"]);
 expectType<ParsedEnvs>(extracted);
 expectType<string>(extracted["BASE"]);
 
-expectType<ConfigOptions>(snackables.load("test"));
-const envConfig = snackables.load("test");
+expectType<ConfigOptions>(env.load("test"));
+const envConfig = env.load("test");
 expectType<ConfigOptions>(envConfig);
 expectType<string>(envConfig["dir"] as string);
 
-expectType<ParsedEnvs>(snackables.parse("NODE_ENV=production\nDB_HOST=a.b.c"));
+expectType<ParsedEnvs>(env.parse("NODE_ENV=production\nDB_HOST=a.b.c"));
 
-const parsedEnvs = snackables.parse(Buffer.from("JUSTICE=league\n"));
+const parsedEnvs = env.parse(Buffer.from("JUSTICE=league\n"));
 expectType<ParsedEnvs>(parsedEnvs);
-expectType<ProcessEnv>(snackables.assign(parsedEnvs))
+expectType<ProcessEnv>(env.assign(parsedEnvs))

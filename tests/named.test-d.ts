@@ -1,6 +1,6 @@
 import { expectType } from "tsd";
-import { assign, config, load, parse } from "snackables";
-import type { ConfigOptions, ParsedEnvs, ProcessEnv } from "snackables";
+import { assign, config, load, parse } from "@noshot/env";
+import type { ConfigOptions, ParsedEnvs, ProcessEnv } from "@noshot/env";
 
 const env = config();
 expectType<string>(env.parsed["ROOT"]);

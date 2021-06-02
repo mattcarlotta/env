@@ -7,7 +7,7 @@ tests
 .env.base
 .env.interpolate
 .env.test
-.eslintignore
+.eslintignoreenv
 .eslintrc
 .gitignore
 .npmignore
@@ -17,7 +17,7 @@ tests
 compress.ts
 UPDATES.md
 jest.json
-snackablesLogo.png
+envLogo.png
 tsconfig.build.json
 tsconfig.json
 npm-debug.*

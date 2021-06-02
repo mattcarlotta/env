@@ -1,11 +1,11 @@
 {
-  "name": "snackables",
-  "version": "3.0.10",
+  "name": "env",
+  "version": "1.0.0",
   "description": "Loading byte sized ENVs made simple.",
   "main": "index.js",
   "module": "esm/index.mjs",
   "sideEffects": false,
-  "homepage": "https://github.com/mattcarlotta/snackables",
+  "homepage": "https://github.com/no-shot/env",
   "files": [
     "index.js",
     "index.d.ts",
@@ -66,7 +66,7 @@
       "target": "esnext",
       "baseUrl": ".",
       "paths": {
-        "snackables": [
+        "env": [
           "."
         ]
       }
@@ -74,10 +74,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+git@github.com:mattcarlotta/snackables.git"
+    "url": "git+git@github.com:no-shot/env.git"
   },
   "keywords": [
-    "snackables",
     "env",
     ".env",
     "environment",
@@ -88,7 +87,7 @@
   "author": "Matt Carlotta",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/mattcarlotta/snackables/issues"
+    "url": "https://github.com/no-shot/env/issues"
   },
   "engines": {
     "node": ">=12"

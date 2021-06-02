@@ -1,28 +1,28 @@
-![snackablesLogo](https://github.com/mattcarlotta/snackables/blob/main/snackablesLogo.png?raw=true)
+![envLogo](https://github.com/no-shot/env/blob/main/envLogo.png?raw=true)
 
 <p align="center">
-  <a href="https://www.npmjs.com/package/snackables">
-    <img src="https://img.shields.io/npm/v/snackables.svg?style=for-the-badge&labelColor=000000">
+  <a href="https://www.npmjs.com/package/@noshot/env">
+    <img src="https://img.shields.io/npm/v/no-shot/env.svg?style=for-the-badge&labelColor=000000">
   </a>
-  <a href="https://github.com/mattcarlotta/snackables/actions?query=workflow%3A%22Publish+Workflow%22">
-    <img src="https://img.shields.io/github/workflow/status/mattcarlotta/snackables/Publish%20Workflow?style=for-the-badge&labelColor=000000">
+  <a href="https://github.com/no-shot/env/actions?query=workflow%3A%22Publish+Workflow%22">
+    <img src="https://img.shields.io/github/workflow/status/no-shot/env/Publish%20Workflow?style=for-the-badge&labelColor=000000">
   </a>
-  <a href="https://codecov.io/gh/mattcarlotta/snackables/branch/main">
-    <img src="https://img.shields.io/codecov/c/github/mattcarlotta/snackables?style=for-the-badge&labelColor=000000">
+  <a href="https://codecov.io/gh/no-shot/env/branch/main">
+    <img src="https://img.shields.io/codecov/c/github/no-shot/env?style=for-the-badge&labelColor=000000">
   </a>
-  <a href="https://github.com/mattcarlotta/snackables/blob/master/LICENSE">
-    <img src="https://img.shields.io/npm/l/snackables.svg?style=for-the-badge&labelColor=000000">
+  <a href="https://github.com/no-shot/env/blob/master/LICENSE">
+    <img src="https://img.shields.io/npm/l/env.svg?style=for-the-badge&labelColor=000000">
   </a>
-  <a href="https://www.npmjs.com/package/snackables">
-    <img src="https://img.shields.io/npm/dm/snackables?style=for-the-badge&labelColor=000000">
+  <a href="https://www.npmjs.com/package/@noshot/env">
+    <img src="https://img.shields.io/npm/dm/@noshot/env?style=for-the-badge&labelColor=000000">
   </a>
 </p>
 
-Heavily inspired by [dotenv](https://github.com/motdotla/dotenv) and [dotenv-expand](https://github.com/motdotla/dotenv-expand), snackables is a simple to use [zero-dependency](https://bundlephobia.com/result?p=snackables@) package module that automatically loads environment variables from a predefined Env variable. When it comes to `.env.*` file naming, snackables is unopinionated, so you can name them anything you'd like or you can follow the [The Twelve-Factor App](https://12factor.net/config) methodology.
+Heavily inspired by [dotenv](https://github.com/motdotla/dotenv) and [dotenv-expand](https://github.com/motdotla/dotenv-expand), @noshot/env is a simple to use [zero-dependency](https://bundlephobia.com/result?p=@noshot/env@) package module that automatically loads environment variables from a predefined Env variable. When it comes to `.env.*` file naming, @noshot/env is unopinionated, so you can name them anything you'd like or you can follow the [The Twelve-Factor App](https://12factor.net/config) methodology.
 
-## Why snackables?
+## Why @noshot/env?
 
-✔️ Loads `.env.*` files between **40%-70%** faster than dotenv and dotenv-expand: [demo](https://github.com/mattcarlotta/snackables-v-dotenv-v-next), [metrics](https://github.com/mattcarlotta/snackables-v-dotenv-v-next#metrics)
+✔️ Loads `.env.*` files between **40%-70%** faster than dotenv and dotenv-expand: [demo](https://github.com/no-shot/env-v-dotenv-v-next), [metrics](https://github.com/no-shot/env-v-dotenv-v-next#metrics)
 
 ✔️ Typescript source with included type declarations
 
@@ -52,7 +52,7 @@ Heavily inspired by [dotenv](https://github.com/motdotla/dotenv) and [dotenv-exp
 
 [Usage](#usage)
 
-[Examples](https://github.com/mattcarlotta/snackables-examples)
+[Examples](https://github.com/no-shot/env-examples)
 
 [Env Configuration File](#env-configuration-file)
 
@@ -90,7 +90,7 @@ Heavily inspired by [dotenv](https://github.com/motdotla/dotenv) and [dotenv-exp
 
 [FAQ](#faq)
   - [Should I commit my .env files?](#should-i-commit-my-env-files)
-  - [How does snackables work and will it override already set or predefined variables?](#how-does-snackables-work-and-will-it-override-already-set-or-predefined-variables)
+  - [How does @noshot/env work and will it override already set or predefined variables?](#how-does-@noshot/env-work-and-will-it-override-already-set-or-predefined-variables)
   - [Why doesn't the parse method automatically assign Envs?](#why-doesnt-the-parse-method-automatically-assign-envs)
   - [Are the Env variables required?](#are-the-env-variables-required)
   - [How do I use ES modules?](#how-do-i-use-es-modules)
@@ -103,15 +103,15 @@ Heavily inspired by [dotenv](https://github.com/motdotla/dotenv) and [dotenv-exp
 
 ```bash
 # with npm
-npm install snackables
+npm install @noshot/env
 
 # or with yarn
-yarn add snackables
+yarn add @noshot/env
 ```
 
 ## Usage
 
-In a CLI or within your package.json, under the `scripts` property, define [ENV variables](#cli-options) before running a process. Snackables loads `.env.*` files according to their defined order (left to right), where the last imported file will take precedence over any previously imported files.
+In a CLI or within your package.json, under the `scripts` property, define [ENV variables](#cli-options) before running a process. @noshot/env loads `.env.*` files according to their defined order (left to right), where the last imported file will take precedence over any previously imported files.
 
 For example, `.env.*` files can loaded by an [Env Configuration File](#env-configuration-file) file via [LOAD_CONFIG](#load_config):
 
@@ -122,7 +122,7 @@ For example, `.env.*` files can loaded by an [Env Configuration File](#env-confi
     "staging": "LOAD_CONFIG=staging node app.js"
   },
   "dependencies": {
-    "snackables": "^x.x.x"
+    "@noshot/env": "^x.x.x"
   }
 }
 ```
@@ -136,16 +136,16 @@ Or, `.env.*` files can be loaded by their filename (assuming they're located in 
     "staging": "ENV_LOAD=.env.base,.env.staging node app.js"
   },
   "dependencies": {
-    "snackables": "^x.x.x"
+    "@noshot/env": "^x.x.x"
   }
 }
 ```
 
-All you need to do now is `require`/`import` the snackables base package as early as possible:
+All you need to do now is `require`/`import` the @noshot/env base package as early as possible:
 
 ```javascript
-require("snackables");
-// import 'snackables';
+require("@noshot/env");
+// import '@noshot/env';
 ```
 
 Optionally, you can [preload](#preload) your `.env.*` files instead!
@@ -179,12 +179,12 @@ Then in your `package.json`, add a [LOAD_CONFIG](#load_config) variable to load 
     "dev": "LOAD_CONFIG=development node app.js"
   },
   "dependencies": {
-    "snackables": "^x.x.x"
+    "@noshot/env": "^x.x.x"
   }
 }
 ```
 
-Then, either [preload](#preload) or import the `snackables` package as early as possible to load the `development` Envs.
+Then, either [preload](#preload) or import the `@noshot/env` package as early as possible to load the `development` Envs.
 
 ```json
 {
@@ -200,7 +200,7 @@ Then, either [preload](#preload) or import the `snackables` package as early as 
 
 #### LOAD_CONFIG
 
-By defining a `LOAD_CONFIG` variable, this will let snackables know you'd like to load an **env.config.json** configuration file according to a specific environment name. The environment naming is unopinionated -- they can be named anything you'd like (for example: `dev`, `staging`, `prepublish`, `testing` and so on); however, the environment name **must** match one of environments specified in the configuration file.
+By defining a `LOAD_CONFIG` variable, this will let @noshot/env know you'd like to load an **env.config.json** configuration file according to a specific environment name. The environment naming is unopinionated -- they can be named anything you'd like (for example: `dev`, `staging`, `prepublish`, `testing` and so on); however, the environment name **must** match one of environments specified in the configuration file.
 
 ```json
 {
@@ -208,7 +208,7 @@ By defining a `LOAD_CONFIG` variable, this will let snackables know you'd like t
     "dev": "LOAD_CONFIG=development node app.js"
   },
   "dependencies": {
-    "snackables": "^x.x.x"
+    "@noshot/env": "^x.x.x"
   }
 }
 ```
@@ -238,16 +238,16 @@ By defining a `LOAD_CONFIG` variable, this will let snackables know you'd like t
 By utilizing any of the Env variables defined below, you will only need to [preload](#preload) or import the base package to automatically load Envs:
 
 ```js
-require("snackables")
+require("@noshot/env")
 
-// import "snackables"
+// import "@noshot/env"
 ```
 
 Note: Defining any of the Env variables below **WILL NOT** change the default behavior of `config`, `load` or `parse` methods.
 
 #### ENV_LOAD
 
-By defining an `ENV_LOAD` variable, this will let snackables know you'd like to immediately load some `.env.*` files when the package is imported. You can pass a single file name or a list of file names separated by commas. By default, snackables attempts to load them from within the project's **root** directory.
+By defining an `ENV_LOAD` variable, this will let @noshot/env know you'd like to immediately load some `.env.*` files when the package is imported. You can pass a single file name or a list of file names separated by commas. By default, @noshot/env attempts to load them from within the project's **root** directory.
 
 For example:
 
@@ -258,14 +258,14 @@ For example:
     "prod": "ENV_LOAD=.env.prod node app.js"
   },
   "dependencies": {
-    "snackables": "^x.x.x"
+    "@noshot/env": "^x.x.x"
   }
 }
 ```
 
 #### ENV_DIR
 
-By defining an `ENV_DIR` variable, this will let snackables know you'd like to load `.env.*` files from a custom directory.
+By defining an `ENV_DIR` variable, this will let @noshot/env know you'd like to load `.env.*` files from a custom directory.
 
 ```json
 {
@@ -273,14 +273,14 @@ By defining an `ENV_DIR` variable, this will let snackables know you'd like to l
     "dev": "ENV_DIR=custom/path/to/directory ENV_LOAD=.env.base,.env.dev node app.js"
   },
   "dependencies": {
-    "snackables": "^x.x.x"
+    "@noshot/env": "^x.x.x"
   }
 }
 ```
 
 #### ENV_ENCODE
 
-By defining an `ENV_ENCODE` variable, this will let snackables know you'd like to set the encoding type of the `.env.*` file(s). The following file encode types are supported:
+By defining an `ENV_ENCODE` variable, this will let @noshot/env know you'd like to set the encoding type of the `.env.*` file(s). The following file encode types are supported:
 
 ```
 ascii
@@ -303,14 +303,14 @@ For example:
     "dev": "ENV_LOAD=.env.dev ENV_ENCODE=latin1 node app.js"
   },
   "dependencies": {
-    "snackables": "^x.x.x"
+    "@noshot/env": "^x.x.x"
   }
 }
 ```
 
 #### ENV_OVERRIDE
 
-By defining an `ENV_OVERRIDE` variable, this will let snackables know you'd like to override Envs in [`process.env`](https://nodejs.org/docs/latest/api/process.html#process_process_env).
+By defining an `ENV_OVERRIDE` variable, this will let @noshot/env know you'd like to override Envs in [`process.env`](https://nodejs.org/docs/latest/api/process.html#process_process_env).
 
 For example:
 
@@ -320,14 +320,14 @@ For example:
     "dev": "ENV_LOAD=.env.dev ENV_DEBUG=true ENV_OVERRIDE=true node app.js"
   },
   "dependencies": {
-    "snackables": "^x.x.x"
+    "@noshot/env": "^x.x.x"
   }
 }
 ```
 
 #### ENV_DEBUG
 
-By defining an `ENV_DEBUG` variable within one of your package.json scripts, this will let snackables know you'd like to be in debug mode and output the results of extracting/loading Envs.
+By defining an `ENV_DEBUG` variable within one of your package.json scripts, this will let @noshot/env know you'd like to be in debug mode and output the results of extracting/loading Envs.
 
 For example:
 
@@ -337,28 +337,28 @@ For example:
     "dev": "ENV_LOAD=.env.dev ENV_DEBUG=true node app.js"
   },
   "dependencies": {
-    "snackables": "^x.x.x"
+    "@noshot/env": "^x.x.x"
   }
 }
 ```
 
 ## Preload
 
-You can use the `--require` (`-r`) [command line option](https://nodejs.org/api/cli.html#cli_r_require_module) with `snackables` to preload your `.env.*` files! By doing so, you do not need to `require`/`import` the snackables package within your project.
+You can use the `--require` (`-r`) [command line option](https://nodejs.org/api/cli.html#cli_r_require_module) with `@noshot/env` to preload your `.env.*` files! By doing so, you do not need to `require`/`import` the @noshot/env package within your project.
 
 CLI:
 ```bash
-$ LOAD_CONFIG=dev node -r snackables app.js
+$ LOAD_CONFIG=dev node -r @noshot/env app.js
 ```
 
 Package.json:
 ```json
 {
   "scripts": {
-    "dev": "LOAD_CONFIG=dev node -r snackables app.js"
+    "dev": "LOAD_CONFIG=dev node -r @noshot/env app.js"
   },
   "dependencies": {
-    "snackables": "^x.x.x"
+    "@noshot/env": "^x.x.x"
   }
 }
 ```
@@ -368,7 +368,7 @@ Package.json:
 If you wish to manaully import `.env.*` files, then the config method will read your `.env.*` files, parse the contents, assign them to [`process.env`](https://nodejs.org/docs/latest/api/process.html#process_process_env), and return an `Object` with `parsed` and `extracted` Envs:
 
 ```js
-const result = snackables.config();
+const result = @noshot/env.config();
 
 console.log("parsed", result.parsed); // process.env with loaded Envs
 console.log("extracted", result.extracted); // extracted Envs within a { KEY: VALUE } object
@@ -398,9 +398,9 @@ You may specify a single directory path if your files are located elsewhere.
 A single directory path as a `string`:
 
 ```js
-require("snackables").config({ dir: "custom/path/to/directory" });
+require("@noshot/env").config({ dir: "custom/path/to/directory" });
 
-// import { config } from "snackables"
+// import { config } from "@noshot/env"
 // config({ dir: "custom/path/to/directory" });
 ```
 
@@ -413,39 +413,39 @@ You may specify custom paths if your files are located elsewhere (recommended to
 A single file path as a `string`:
 
 ```js
-require("snackables").config({ paths: "custom/path/to/.env" });
+require("@noshot/env").config({ paths: "custom/path/to/.env" });
 
-// import { config } from "snackables"
+// import { config } from "@noshot/env"
 // config({ paths: "custom/path/to/.env" });
 ```
 
 Multiple file paths as a single `string` separated by commas:
 
 ```js
-require("snackables").config({
+require("@noshot/env").config({
   paths: "custom/path/to/.env,custom/path/to/.env.base"
 });
 
-// import { config } from "snackables"
+// import { config } from "@noshot/env"
 // config({ paths: "custom/path/to/.env,custom/path/to/.env.base" });
 ```
 
 Or multiple file paths as an `Array` of `string`s:
 
 ```js
-require("snackables").config({
+require("@noshot/env").config({
   paths: ["custom/path/to/.env", "custom/path/to/.env.base"]
 });
 
-// import { config } from "snackables"
+// import { config } from "@noshot/env"
 // config({ paths: ["custom/path/to/.env", "custom/path/to/.env.base"] });
 ```
 
 It's highly recommended that you utilize [dir](#config-dir) if you're loading from a single custom directory:
 ```js
-require("snackables").config({ dir: "custom/path/to/directory", paths: [".env", ".env.base"] });
+require("@noshot/env").config({ dir: "custom/path/to/directory", paths: [".env", ".env.base"] });
 
-// import { config } from "snackables"
+// import { config } from "@noshot/env"
 // config({ dir: "custom/path/to/directory", paths: [".env", ".env.base"] });
 ```
 
@@ -456,9 +456,9 @@ require("snackables").config({ dir: "custom/path/to/directory", paths: [".env", 
 You may specify the encoding [type](https://nodejs.org/api/buffer.html#buffer_buffers_and_character_encodings) of your file containing environment variables.
 
 ```js
-require("snackables").config({ encoding: "latin1" });
+require("@noshot/env").config({ encoding: "latin1" });
 
-// import { config } from "snackables"
+// import { config } from "@noshot/env"
 // config({ encoding: "latin1" });
 ```
 
@@ -469,9 +469,9 @@ require("snackables").config({ encoding: "latin1" });
 You may specify whether or not to override Envs in [`process.env`](https://nodejs.org/docs/latest/api/process.html#process_process_env). 
 
 ```js
-require("snackables").config({ override: true });
+require("@noshot/env").config({ override: true });
 
-// import { config } from "snackables"
+// import { config } from "@noshot/env"
 // config({ override: true });
 ```
 
@@ -482,9 +482,9 @@ require("snackables").config({ override: true });
 You may turn on logging to help debug file loading.
 
 ```js
-require("snackables").config({ debug: true });
+require("@noshot/env").config({ debug: true });
 
-// import { config } from "snackables"
+// import { config } from "@noshot/env"
 // config({ debug: true });
 ```
 
@@ -506,9 +506,9 @@ For some use cases, you may want to pass parse a `string` or `Buffer` which retu
 
 ```js
 const { readFileSync } = require("fs");
-const { parse } = require("snackables");
+const { parse } = require("@noshot/env");
 // import { readFileSync } from "fs";
-// import { parse } from "snackables";
+// import { parse } from "@noshot/env";
 
 const config = parse(Buffer.from("BASIC=basic")); // will return an object
 console.log(typeof config, config); // object { BASIC : 'basic' }
@@ -525,9 +525,9 @@ If you wish to extract and potentially override Envs in [`process.env`](https://
 
 ```js
 const { readFileSync } = require("fs");
-const { parse } = require("snackables");
+const { parse } = require("@noshot/env");
 // import { readFileSync } from "fs";
-// import { parse } from "snackables";
+// import { parse } from "@noshot/env";
 
 const config = parse(Buffer.from("BASIC=basic"), true); // will return an object
 console.log(typeof config, config); // object { BASIC : 'basic' }
@@ -571,8 +571,8 @@ dir: string | undefined
 For some use cases, you may want to manually load the **env.config.json** configuration file and pass its returned environment configuration to the [config method](#config-method). To do so, pass `load` an environment name as the first argument:
 
 ```js
-const { config, load } = require("snackables");
-// import { config, load } from "snackables";
+const { config, load } = require("@noshot/env");
+// import { config, load } from "@noshot/env";
 
 const configArgs = load("development"); // will return an object of config arguments
 console.log(typeof configArgs, configArgs) // object { paths: ".env.dev", debug: true }
@@ -584,8 +584,8 @@ config(configArgs) // parses .env.dev and assigns it to process.env
 For some use cases, you may want to manually load an **env.config.json** configuration file that is **not** located at the project's root directory and pass its returned environment configuration to the [config method](#config-method). To do so, pass `load` an environment name as the first argument and an absolute directory path as a second argument:
 
 ```js
-const { config, load } = require("snackables");
-// import { config, load } from "snackables";
+const { config, load } = require("@noshot/env");
+// import { config, load } from "@noshot/env";
 
 const configArgs = load("development", "path/to/custom/directory"); // will return an object of config arguments
 console.log(typeof configArgs, configArgs) // object { paths: ".env.dev", debug: true }
@@ -692,9 +692,9 @@ No. It's **strongly** recommended not to commit your `.env.*` files to version c
 
 On the same note, most CI (continous integration) services like Github Actions and CircleCI offer their own Env configuration options for CI actions, so commiting `.env.*` files is unnecessary.
 
-### How does snackables work and will it override already set or predefined variables?
+### How does @noshot/env work and will it override already set or predefined variables?
 
-By default, snackables will look for the `.env.*` file(s) defined within a `LOAD_CONFIG` environment variable and append them to [`process.env`](https://nodejs.org/docs/latest/api/process.html#process_process_env).
+By default, @noshot/env will look for the `.env.*` file(s) defined within a `LOAD_CONFIG` environment variable and append them to [`process.env`](https://nodejs.org/docs/latest/api/process.html#process_process_env).
 
 For example, `LOAD_CONFIG=development` loads two files `.env.base` and `.env.dev` from [env.config.json](#env-configuration-file):
 
@@ -704,7 +704,7 @@ For example, `LOAD_CONFIG=development` loads two files `.env.base` and `.env.dev
     "dev": "LOAD_CONFIG=development node app.js"
   },
   "dependencies": {
-    "snackables": "^x.x.x"
+    "@noshot/env": "^x.x.x"
   }
 }
 ```
@@ -725,7 +725,7 @@ HOST=http://localhost
 PORT=3000
 ```
 
-snackables will parse the files and append the Envs in the order of how they were defined in [paths](#config-paths). In the example above, the `DB_PASS` variable within `.env.base` would be overidden by `.env.dev` because `.env.dev` file was imported last and, as a result, its `DB_PASS` will be assigned to [`process.env`](https://nodejs.org/docs/latest/api/process.html#process_process_env).
+@noshot/env will parse the files and append the Envs in the order of how they were defined in [paths](#config-paths). In the example above, the `DB_PASS` variable within `.env.base` would be overidden by `.env.dev` because `.env.dev` file was imported last and, as a result, its `DB_PASS` will be assigned to [`process.env`](https://nodejs.org/docs/latest/api/process.html#process_process_env).
 
 By default, Envs that are **pre-set** or **defined** within [`process.env`](https://nodejs.org/docs/latest/api/process.html#process_process_env) **WILL NOT be overidden**. If you wish to override variables in [`process.env`](https://nodejs.org/docs/latest/api/process.html#process_process_env) see [ENV_OVERRIDE](#env_override) or [Config Override](#config-override) or [Parse Override](#parse-override).
 
@@ -738,8 +738,8 @@ Why?
 Under the hood, the `config` method utilizes the `parse` method to extract one or multiple `.env.*` files as it loops over the `config` [paths](#config-paths) argument. The `config` method expects `parse` to return a single `Object` of extracted Envs that will be accumulated with other files' extracted Envs. The result of these accumulated Envs is then assigned to [`process.env`](https://nodejs.org/docs/latest/api/process.html#process_process_env) **once** -- this approach has the added benefit of prioritizing Envs  without using **any** additional logic since the last set of extracted Envs automatically override any previous Envs (by leveraging [Object.assign](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign#Merging_objects_with_same_properties)). While allowing Envs to be assigned multiple times to [`process.env`](https://nodejs.org/docs/latest/api/process.html#process_process_env) doesn't appear to be much different in terms of performance, it unforuntately requires quite a bit more additional overhead logic to determine which `.env.*` has priority and whether or not to *conditionally* assign them (including times when you might want to parse Envs, but not neccesarily assign them). A workaround to this limitation is to simply assign them yourself:
 
 ```js
-const { assign, parse } = require("snackables");
-// import { assign, parse } from "snackables";
+const { assign, parse } = require("@noshot/env");
+// import { assign, parse } from "@noshot/env";
 
 const parsed = parse(Buffer.from("BASIC=basic")); // parse/interpolate Envs not defined in process.env
 // const parsed = parse(Buffer.from("BASIC=basic"), true); // parse/interpolate and override any Envs in process.env
@@ -752,19 +752,19 @@ assign(parsed); // assigns parsed Envs to process.env
 To be as flexible as possible, the Env variables are not required to set Envs to [`process.env`](https://nodejs.org/docs/latest/api/process.html#process_process_env). However, you will then be required to use this package similarly to how you would use dotenv. See [Config Method](#config-method):
 
 ```js
-const { config } = require("snackables");
-// import { config } from "snackables";
+const { config } = require("@noshot/env");
+// import { config } from "@noshot/env";
 
 config({ ... });
 ```
 
 ### How do I use ES modules?
 
-As of Node v12.17.0+, node removed the experimental flag for ES modules. Unfortunately, most of development world has yet to adopt ESM as the standard. Therefore, until there's more widespread support, this documentation will caution against using ESM and instead opt for CJS. In addition, node doesn't support [preloading](#preload) ESM, since it utilizes Node's `require` function. That said, snackables offers **experimental** support for ESM. You can try it out by importing from the `esm` directory of the package:
+As of Node v12.17.0+, node removed the experimental flag for ES modules. Unfortunately, most of development world has yet to adopt ESM as the standard. Therefore, until there's more widespread support, this documentation will caution against using ESM and instead opt for CJS. In addition, node doesn't support [preloading](#preload) ESM, since it utilizes Node's `require` function. That said, @noshot/env offers **experimental** support for ESM. You can try it out by importing from the `esm` directory of the package:
 
 ```mjs
-import snackables from "snackables/esm";
-// import { assign, config, load, parse } from "snackables/esm";
+import @noshot/env from "@noshot/env/esm";
+// import { assign, config, load, parse } from "@noshot/env/esm";
 ```
 
 ## Contributing Guide
