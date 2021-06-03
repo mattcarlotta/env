@@ -99,8 +99,6 @@ Heavily inspired by [dotenv](https://github.com/motdotla/dotenv) and [dotenv-exp
 
 [Contributing Guide](#contributing-guide)
 
-[Updates Log](#updates-log)
-
 ## Installation
 
 ```bash
@@ -773,6 +771,3 @@ import @noshot/env from "@noshot/env/esm";
 
 See [CONTRIBUTING.md](CONTRIBUTING.md)
 
-## Updates Log
-
-See [UPDATESLOG.md](UPDATESLOG.md)
