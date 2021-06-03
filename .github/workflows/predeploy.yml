@@ -2,7 +2,7 @@ name: Development Workflow
 on:
   push:
     branches:
-      - canary
+      - development
 
 jobs:
   predeploy:

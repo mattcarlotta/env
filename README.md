@@ -1,8 +1,10 @@
-![envLogo](https://github.com/no-shot/env/blob/main/envLogo.png?raw=true)
+<div align="center" style="margin: 20px 0;">
+  <img src="https://github.com/no-shot/env/blob/main/noshotLogo.png?raw=true" width="450px">
+</div>
 
 <p align="center">
   <a href="https://www.npmjs.com/package/@noshot/env">
-    <img src="https://img.shields.io/npm/v/no-shot/env.svg?style=for-the-badge&labelColor=000000">
+    <img src="https://img.shields.io/npm/v/@noshot/env.svg?style=for-the-badge&labelColor=000000">
   </a>
   <a href="https://github.com/no-shot/env/actions?query=workflow%3A%22Publish+Workflow%22">
     <img src="https://img.shields.io/github/workflow/status/no-shot/env/Publish%20Workflow?style=for-the-badge&labelColor=000000">
@@ -10,7 +12,7 @@
   <a href="https://codecov.io/gh/no-shot/env/branch/main">
     <img src="https://img.shields.io/codecov/c/github/no-shot/env?style=for-the-badge&labelColor=000000">
   </a>
-  <a href="https://github.com/no-shot/env/blob/master/LICENSE">
+  <a href="https://github.com/no-shot/env/blob/main/LICENSE">
     <img src="https://img.shields.io/npm/l/env.svg?style=for-the-badge&labelColor=000000">
   </a>
   <a href="https://www.npmjs.com/package/@noshot/env">
@@ -18,11 +20,11 @@
   </a>
 </p>
 
-Heavily inspired by [dotenv](https://github.com/motdotla/dotenv) and [dotenv-expand](https://github.com/motdotla/dotenv-expand), @noshot/env is a simple to use [zero-dependency](https://bundlephobia.com/result?p=@noshot/env@) package module that automatically loads environment variables from a predefined Env variable. When it comes to `.env.*` file naming, @noshot/env is unopinionated, so you can name them anything you'd like or you can follow the [The Twelve-Factor App](https://12factor.net/config) methodology.
+Heavily inspired by [dotenv](https://github.com/motdotla/dotenv) and [dotenv-expand](https://github.com/motdotla/dotenv-expand), `@noshot/env` is a simple to use [zero-dependency](https://bundlephobia.com/result?p=@noshot/env@) package module that automatically loads environment variables from a predefined Env variable. When it comes to `.env.*` file naming, @noshot/env is unopinionated, so you can name them anything you'd like or you can follow the [The Twelve-Factor App](https://12factor.net/config) methodology.
 
 ## Why @noshot/env?
 
-✔️ Loads `.env.*` files between **40%-70%** faster than dotenv and dotenv-expand: [demo](https://github.com/no-shot/env-v-dotenv-v-next), [metrics](https://github.com/no-shot/env-v-dotenv-v-next#metrics)
+✔️ Loads `.env.*` files between **40%-70%** faster than dotenv and dotenv-expand: [demo](https://github.com/no-shot/env-metrics), [metrics](https://github.com/no-shot/env-metrics#metrics)
 
 ✔️ Typescript source with included type declarations
 
