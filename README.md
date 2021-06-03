@@ -20,7 +20,7 @@
   </a>
 </p>
 
-Heavily inspired by [dotenv](https://github.com/motdotla/dotenv) and [dotenv-expand](https://github.com/motdotla/dotenv-expand), `@noshot/env` is a simple to use [zero-dependency](https://bundlephobia.com/result?p=@noshot/env@) package module that automatically loads environment variables from a predefined Env variable. When it comes to `.env.*` file naming, @noshot/env is unopinionated, so you can name them anything you'd like or you can follow the [The Twelve-Factor App](https://12factor.net/config) methodology.
+Heavily inspired by [dotenv](https://github.com/motdotla/dotenv) and [dotenv-expand](https://github.com/motdotla/dotenv-expand), `@noshot/env` is a simple to use [zero-dependency](https://bundlephobia.com/result?p=@noshot/env) package module that automatically loads environment variables from a predefined Env variable. When it comes to `.env.*` file naming, `@noshot/env` is unopinionated, so you can name them anything you'd like or you can follow the [The Twelve-Factor App](https://12factor.net/config) methodology.
 
 ## Why @noshot/env?
 
