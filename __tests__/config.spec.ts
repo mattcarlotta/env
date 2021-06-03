@@ -61,7 +61,7 @@ describe("Config Method", () => {
 
     expect(extracted).toEqual(
       expect.objectContaining({
-        PATH: "true"
+        LOAD_PATH: "true"
       })
     );
   });

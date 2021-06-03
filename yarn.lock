@@ -714,6 +714,14 @@
     "@nodelib/fs.scandir" "2.1.3"
     fastq "^1.6.0"
 
+"@noshot/utils@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@noshot/utils/-/utils-1.0.1.tgz#5f7c063a047b4970858007efb0ea04293ff81f96"
+  integrity sha512-D9FxZP90kPVXUyME+R/Vl8rNBd9OlsznR4quYL5vQZ5q0hF1R4UdBzo/HKtVExvp9mRFwH37nR72JaA/qJhQtQ==
+  dependencies:
+    rimraf "^3.0.2"
+    terser "^5.7.0"
+
 "@rollup/pluginutils@^4.1.0":
   version "4.1.0"
   resolved "https://registry.yarnpkg.com/@rollup/pluginutils/-/pluginutils-4.1.0.tgz#0dcc61c780e39257554feb7f77207dceca13c838"

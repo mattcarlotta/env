@@ -1,4 +1,4 @@
-import compressFiles from "@noshot/utils/compressFiles";
+import removeFiles from "@noshot/utils/removeFiles";
 
 (async (): Promise<void> => {
   try {
@@ -14,7 +14,7 @@ import compressFiles from "@noshot/utils/compressFiles";
       ""
     ].map(file => `${file ? `${file}/` : ""}/index.js`);
 
-    await compressFiles(dirs);
+    await removeFiles(dirs);
     process.exit(0);
   } catch (error) {
     console.error(error);

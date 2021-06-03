@@ -1,8 +1,10 @@
-![envLogo](https://github.com/no-shot/env/blob/main/envLogo.png?raw=true)
+<div align="center" style="margin: 20px 0;">
+  <img src="https://github.com/no-shot/env/blob/main/noshotLogo.png?raw=true" width="450px">
+</div>
 
 <p align="center">
   <a href="https://www.npmjs.com/package/@noshot/env">
-    <img src="https://img.shields.io/npm/v/no-shot/env.svg?style=for-the-badge&labelColor=000000">
+    <img src="https://img.shields.io/npm/v/@noshot/env.svg?style=for-the-badge&labelColor=000000">
   </a>
   <a href="https://github.com/no-shot/env/actions?query=workflow%3A%22Publish+Workflow%22">
     <img src="https://img.shields.io/github/workflow/status/no-shot/env/Publish%20Workflow?style=for-the-badge&labelColor=000000">
@@ -10,7 +12,7 @@
   <a href="https://codecov.io/gh/no-shot/env/branch/main">
     <img src="https://img.shields.io/codecov/c/github/no-shot/env?style=for-the-badge&labelColor=000000">
   </a>
-  <a href="https://github.com/no-shot/env/blob/master/LICENSE">
+  <a href="https://github.com/no-shot/env/blob/main/LICENSE">
     <img src="https://img.shields.io/npm/l/env.svg?style=for-the-badge&labelColor=000000">
   </a>
   <a href="https://www.npmjs.com/package/@noshot/env">
@@ -18,11 +20,11 @@
   </a>
 </p>
 
-Heavily inspired by [dotenv](https://github.com/motdotla/dotenv) and [dotenv-expand](https://github.com/motdotla/dotenv-expand), @noshot/env is a simple to use [zero-dependency](https://bundlephobia.com/result?p=@noshot/env@) package module that automatically loads environment variables from a predefined Env variable. When it comes to `.env.*` file naming, @noshot/env is unopinionated, so you can name them anything you'd like or you can follow the [The Twelve-Factor App](https://12factor.net/config) methodology.
+Heavily inspired by [dotenv](https://github.com/motdotla/dotenv) and [dotenv-expand](https://github.com/motdotla/dotenv-expand), `@noshot/env` is a simple to use [zero-dependency](https://bundlephobia.com/result?p=@noshot/env) package module that automatically loads environment variables from a predefined Env variable. When it comes to `.env.*` file naming, `@noshot/env` is unopinionated, so you can name them anything you'd like or you can follow the [The Twelve-Factor App](https://12factor.net/config) methodology.
 
 ## Why @noshot/env?
 
-✔️ Loads `.env.*` files between **40%-70%** faster than dotenv and dotenv-expand: [demo](https://github.com/no-shot/env-v-dotenv-v-next), [metrics](https://github.com/no-shot/env-v-dotenv-v-next#metrics)
+✔️ Loads `.env.*` files between **40%-70%** faster than dotenv and dotenv-expand: [demo](https://github.com/no-shot/env-metrics), [metrics](https://github.com/no-shot/env-metrics#metrics)
 
 ✔️ Typescript source with included type declarations
 
@@ -90,14 +92,13 @@ Heavily inspired by [dotenv](https://github.com/motdotla/dotenv) and [dotenv-exp
 
 [FAQ](#faq)
   - [Should I commit my .env files?](#should-i-commit-my-env-files)
-  - [How does @noshot/env work and will it override already set or predefined variables?](#how-does-@noshot/env-work-and-will-it-override-already-set-or-predefined-variables)
+  - [Does this package allow submodule imports?](#does-this-package-allow-submodule-imports)
+  - [How does @noshot/env work and will it override already set or predefined variables?](#how-does-noshotenv-work-and-will-it-override-already-set-or-predefined-variables)
   - [Why doesn't the parse method automatically assign Envs?](#why-doesnt-the-parse-method-automatically-assign-envs)
   - [Are the Env variables required?](#are-the-env-variables-required)
   - [How do I use ES modules?](#how-do-i-use-es-modules)
 
 [Contributing Guide](#contributing-guide)
-
-[Updates Log](#updates-log)
 
 ## Installation
 
@@ -111,7 +112,7 @@ yarn add @noshot/env
 
 ## Usage
 
-In a CLI or within your package.json, under the `scripts` property, define [ENV variables](#cli-options) before running a process. @noshot/env loads `.env.*` files according to their defined order (left to right), where the last imported file will take precedence over any previously imported files.
+In a CLI or within your package.json, under the `scripts` property, define [ENV variables](#cli-options) before running a process. Then `@noshot/env` will load the `.env.*` files according to their defined order (left to right), where the last imported file will take precedence over any previously imported files.
 
 For example, `.env.*` files can loaded by an [Env Configuration File](#env-configuration-file) file via [LOAD_CONFIG](#load_config):
 
@@ -141,7 +142,7 @@ Or, `.env.*` files can be loaded by their filename (assuming they're located in 
 }
 ```
 
-All you need to do now is `require`/`import` the @noshot/env base package as early as possible:
+All you need to do now is `require`/`import` the `@noshot/env` base package as early as possible:
 
 ```javascript
 require("@noshot/env");
@@ -200,7 +201,7 @@ Then, either [preload](#preload) or import the `@noshot/env` package as early as
 
 #### LOAD_CONFIG
 
-By defining a `LOAD_CONFIG` variable, this will let @noshot/env know you'd like to load an **env.config.json** configuration file according to a specific environment name. The environment naming is unopinionated -- they can be named anything you'd like (for example: `dev`, `staging`, `prepublish`, `testing` and so on); however, the environment name **must** match one of environments specified in the configuration file.
+By defining a `LOAD_CONFIG` variable, this will let `@noshot/env` know you'd like to load an **env.config.json** configuration file according to a specific environment name. The environment naming is unopinionated -- they can be named anything you'd like (for example: `dev`, `staging`, `prepublish`, `testing` and so on); however, the environment name **must** match one of environments specified in the configuration file.
 
 ```json
 {
@@ -238,16 +239,16 @@ By defining a `LOAD_CONFIG` variable, this will let @noshot/env know you'd like 
 By utilizing any of the Env variables defined below, you will only need to [preload](#preload) or import the base package to automatically load Envs:
 
 ```js
-require("@noshot/env")
+require("@noshot/env");
 
-// import "@noshot/env"
+// import "@noshot/env";
 ```
 
 Note: Defining any of the Env variables below **WILL NOT** change the default behavior of `config`, `load` or `parse` methods.
 
 #### ENV_LOAD
 
-By defining an `ENV_LOAD` variable, this will let @noshot/env know you'd like to immediately load some `.env.*` files when the package is imported. You can pass a single file name or a list of file names separated by commas. By default, @noshot/env attempts to load them from within the project's **root** directory.
+By defining an `ENV_LOAD` variable, this will let `@noshot/env` know you'd like to immediately load some `.env.*` files when the package is imported. You can pass a single file name or a list of file names separated by commas. By default, `@noshot/env` attempts to load them from within the project's **root** directory.
 
 For example:
 
@@ -265,7 +266,7 @@ For example:
 
 #### ENV_DIR
 
-By defining an `ENV_DIR` variable, this will let @noshot/env know you'd like to load `.env.*` files from a custom directory.
+By defining an `ENV_DIR` variable, this will let `@noshot/env` know you'd like to load `.env.*` files from a custom directory.
 
 ```json
 {
@@ -280,7 +281,7 @@ By defining an `ENV_DIR` variable, this will let @noshot/env know you'd like to 
 
 #### ENV_ENCODE
 
-By defining an `ENV_ENCODE` variable, this will let @noshot/env know you'd like to set the encoding type of the `.env.*` file(s). The following file encode types are supported:
+By defining an `ENV_ENCODE` variable, this will let `@noshot/env` know you'd like to set the encoding type of the `.env.*` file(s). The following file encode types are supported:
 
 ```
 ascii
@@ -310,7 +311,7 @@ For example:
 
 #### ENV_OVERRIDE
 
-By defining an `ENV_OVERRIDE` variable, this will let @noshot/env know you'd like to override Envs in [`process.env`](https://nodejs.org/docs/latest/api/process.html#process_process_env).
+By defining an `ENV_OVERRIDE` variable, this will let `@noshot/env` know you'd like to override Envs in [`process.env`](https://nodejs.org/docs/latest/api/process.html#process_process_env).
 
 For example:
 
@@ -327,7 +328,7 @@ For example:
 
 #### ENV_DEBUG
 
-By defining an `ENV_DEBUG` variable within one of your package.json scripts, this will let @noshot/env know you'd like to be in debug mode and output the results of extracting/loading Envs.
+By defining an `ENV_DEBUG` variable within one of your package.json scripts, this will let `@noshot/env` know you'd like to be in debug mode and output the results of extracting/loading Envs.
 
 For example:
 
@@ -344,7 +345,7 @@ For example:
 
 ## Preload
 
-You can use the `--require` (`-r`) [command line option](https://nodejs.org/api/cli.html#cli_r_require_module) with `@noshot/env` to preload your `.env.*` files! By doing so, you do not need to `require`/`import` the @noshot/env package within your project.
+You can use the `--require` (`-r`) [command line option](https://nodejs.org/api/cli.html#cli_r_require_module) with `@noshot/env` to preload your `.env.*` files! By doing so, you do not need to `require`/`import` the `@noshot/env` package within your project.
 
 CLI:
 ```bash
@@ -368,7 +369,10 @@ Package.json:
 If you wish to manaully import `.env.*` files, then the config method will read your `.env.*` files, parse the contents, assign them to [`process.env`](https://nodejs.org/docs/latest/api/process.html#process_process_env), and return an `Object` with `parsed` and `extracted` Envs:
 
 ```js
-const result = @noshot/env.config();
+const env = require("@noshot/env");
+// import env from "@noshot/env";
+
+const result = env.config();
 
 console.log("parsed", result.parsed); // process.env with loaded Envs
 console.log("extracted", result.extracted); // extracted Envs within a { KEY: VALUE } object
@@ -400,7 +404,7 @@ A single directory path as a `string`:
 ```js
 require("@noshot/env").config({ dir: "custom/path/to/directory" });
 
-// import { config } from "@noshot/env"
+// import { config } from "@noshot/env";
 // config({ dir: "custom/path/to/directory" });
 ```
 
@@ -415,7 +419,7 @@ A single file path as a `string`:
 ```js
 require("@noshot/env").config({ paths: "custom/path/to/.env" });
 
-// import { config } from "@noshot/env"
+// import { config } from "@noshot/env";
 // config({ paths: "custom/path/to/.env" });
 ```
 
@@ -426,7 +430,7 @@ require("@noshot/env").config({
   paths: "custom/path/to/.env,custom/path/to/.env.base"
 });
 
-// import { config } from "@noshot/env"
+// import { config } from "@noshot/env";
 // config({ paths: "custom/path/to/.env,custom/path/to/.env.base" });
 ```
 
@@ -437,7 +441,7 @@ require("@noshot/env").config({
   paths: ["custom/path/to/.env", "custom/path/to/.env.base"]
 });
 
-// import { config } from "@noshot/env"
+// import { config } from "@noshot/env";
 // config({ paths: ["custom/path/to/.env", "custom/path/to/.env.base"] });
 ```
 
@@ -445,7 +449,7 @@ It's highly recommended that you utilize [dir](#config-dir) if you're loading fr
 ```js
 require("@noshot/env").config({ dir: "custom/path/to/directory", paths: [".env", ".env.base"] });
 
-// import { config } from "@noshot/env"
+// import { config } from "@noshot/env";
 // config({ dir: "custom/path/to/directory", paths: [".env", ".env.base"] });
 ```
 
@@ -692,9 +696,27 @@ No. It's **strongly** recommended not to commit your `.env.*` files to version c
 
 On the same note, most CI (continous integration) services like Github Actions and CircleCI offer their own Env configuration options for CI actions, so commiting `.env.*` files is unnecessary.
 
+### Does this package allow submodule imports?
+
+Yes! You can import submodules directly by their name:
+
+```js
+const assign = require("@noshot/env/assign");
+// import assign from "@noshot/env/assign";
+
+const config = require("@noshot/env/config");
+// import config from "@noshot/env/config";
+
+const load = require("@noshot/env/load");
+// import load from "@noshot/env/load";
+
+const parse = require("@noshot/env/parse");
+// import parse from "@noshot/env/parse";
+```
+
 ### How does @noshot/env work and will it override already set or predefined variables?
 
-By default, @noshot/env will look for the `.env.*` file(s) defined within a `LOAD_CONFIG` environment variable and append them to [`process.env`](https://nodejs.org/docs/latest/api/process.html#process_process_env).
+By default, `@noshot/env` will look for the `.env.*` file(s) defined within a `LOAD_CONFIG` environment variable and append them to [`process.env`](https://nodejs.org/docs/latest/api/process.html#process_process_env).
 
 For example, `LOAD_CONFIG=development` loads two files `.env.base` and `.env.dev` from [env.config.json](#env-configuration-file):
 
@@ -725,7 +747,7 @@ HOST=http://localhost
 PORT=3000
 ```
 
-@noshot/env will parse the files and append the Envs in the order of how they were defined in [paths](#config-paths). In the example above, the `DB_PASS` variable within `.env.base` would be overidden by `.env.dev` because `.env.dev` file was imported last and, as a result, its `DB_PASS` will be assigned to [`process.env`](https://nodejs.org/docs/latest/api/process.html#process_process_env).
+`@noshot/env` will parse the files and append the Envs in the order of how they were defined in [paths](#config-paths). In the example above, the `DB_PASS` variable within `.env.base` would be overidden by `.env.dev` because `.env.dev` file was imported last and, as a result, its `DB_PASS` will be assigned to [`process.env`](https://nodejs.org/docs/latest/api/process.html#process_process_env).
 
 By default, Envs that are **pre-set** or **defined** within [`process.env`](https://nodejs.org/docs/latest/api/process.html#process_process_env) **WILL NOT be overidden**. If you wish to override variables in [`process.env`](https://nodejs.org/docs/latest/api/process.html#process_process_env) see [ENV_OVERRIDE](#env_override) or [Config Override](#config-override) or [Parse Override](#parse-override).
 
@@ -760,17 +782,15 @@ config({ ... });
 
 ### How do I use ES modules?
 
-As of Node v12.17.0+, node removed the experimental flag for ES modules. Unfortunately, most of development world has yet to adopt ESM as the standard. Therefore, until there's more widespread support, this documentation will caution against using ESM and instead opt for CJS. In addition, node doesn't support [preloading](#preload) ESM, since it utilizes Node's `require` function. That said, @noshot/env offers **experimental** support for ESM. You can try it out by importing from the `esm` directory of the package:
+As of Node v12.17.0+, node removed the experimental flag for ES modules. Unfortunately, most of development world has yet to adopt ESM as the standard. Therefore, until there's more widespread support, this documentation will caution against using ESM and instead opt for CJS. In addition, node doesn't support [preloading](#preload) ESM, since it utilizes Node's `require` function. That said, this package offers **experimental** support for ESM. You can try it out by importing from the `esm` directory of the package:
 
-```mjs
-import @noshot/env from "@noshot/env/esm";
+```js
+import env from "@noshot/env/esm";
 // import { assign, config, load, parse } from "@noshot/env/esm";
+// import config from "@noshot/env/esm/config";
 ```
 
 ## Contributing Guide
 
 See [CONTRIBUTING.md](CONTRIBUTING.md)
 
-## Updates Log
-
-See [UPDATESLOG.md](UPDATESLOG.md)

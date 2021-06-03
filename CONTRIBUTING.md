@@ -23,3 +23,11 @@ We use [prettier](https://www.npmjs.com/package/prettier) and [eslint](https://w
 ```
 npm run l
 ```
+
+## Typescript Types Style
+
+We use [tsd](https://www.npmjs.com/package/tsd) to maintain Typescript types styles and assertions. Please make sure your PR adheres to the guides by running:
+
+```
+npm run l:types
+```
