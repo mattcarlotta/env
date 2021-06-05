@@ -42,9 +42,9 @@ Heavily inspired by [dotenv](https://github.com/motdotla/dotenv) and [dotenv-exp
 
 ✔️ Supports overriding Envs in [`process.env`](https://nodejs.org/docs/latest/api/process.html#process_process_env)
 
-✔️ Supports Env [interpolation](#interpolation)
-
 ✔️ Supports [extending .env files](#extending-env-files)
+
+✔️ Supports Env [interpolation](#interpolation)
 
 ✔️ Supports Env [preloading](#preload)
 
