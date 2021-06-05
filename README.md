@@ -42,11 +42,13 @@ Heavily inspired by [dotenv](https://github.com/motdotla/dotenv) and [dotenv-exp
 
 ✔️ Supports overriding Envs in [`process.env`](https://nodejs.org/docs/latest/api/process.html#process_process_env)
 
+✔️ Supports [extending .env files](#extending-env-files)
+
 ✔️ Supports Env [interpolation](#interpolation)
 
 ✔️ Supports Env [preloading](#preload)
 
-✔️ Supports loading Envs via an [Env Configuration File](#env-configuration-file) or by an [ENV_LOAD](#env_load) variable
+✔️ Supports loading Envs via an [Env Configuration File](#env-configuration-file)
 
 ## Quick Links
 
@@ -60,11 +62,6 @@ Heavily inspired by [dotenv](https://github.com/motdotla/dotenv) and [dotenv-exp
 
 [CLI Options](#cli-options)
   - [LOAD_CONFIG](#load_config)
-  - [ENV_LOAD](#env_load)
-  - [ENV_DIR](#env_dir)
-  - [ENV_ENCODE](#env_encode)
-  - [ENV_OVERRIDE](#env_override)
-  - [ENV_DEBUG](#env_debug)
 
 [Preload](#preload)
 
@@ -112,7 +109,7 @@ yarn add @noshot/env
 
 ## Usage
 
-In a CLI or within your package.json, under the `scripts` property, define [ENV variables](#cli-options) before running a process. Then `@noshot/env` will load the `.env.*` files according to their defined order (left to right), where the last imported file will take precedence over any previously imported files.
+In a CLI or within your package.json, under the `scripts` property, define [CLI Options](#cli-options) before running a process. Then `@noshot/env` will load the `.env.*` files according to their defined `paths` order (left to right), where the last imported file will take precedence over any previously imported files.
 
 For example, `.env.*` files can loaded by an [Env Configuration File](#env-configuration-file) file via [LOAD_CONFIG](#load_config):
 
@@ -121,20 +118,6 @@ For example, `.env.*` files can loaded by an [Env Configuration File](#env-confi
   "scripts": {
     "dev": "LOAD_CONFIG=development node test.js",
     "staging": "LOAD_CONFIG=staging node app.js"
-  },
-  "dependencies": {
-    "@noshot/env": "^x.x.x"
-  }
-}
-```
-
-Or, `.env.*` files can be loaded by their filename (assuming they're located in the project's root) via [ENV_LOAD](#env_load):
-
-```json
-{
-  "scripts": {
-    "dev": "ENV_LOAD=.env.base node test.js",
-    "staging": "ENV_LOAD=.env.base,.env.staging node app.js"
   },
   "dependencies": {
     "@noshot/env": "^x.x.x"
@@ -232,116 +215,7 @@ By defining a `LOAD_CONFIG` variable, this will let `@noshot/env` know you'd lik
 }
 ```
 
-⚠️ The Env variables listed below will take precendence over `LOAD_CONFIG`. For example, if you mistakely use `LOAD_CONFIG` with `ENV_LOAD`, then `ENV_LOAD` will take precendence.
-
----
-
-By utilizing any of the Env variables defined below, you will only need to [preload](#preload) or import the base package to automatically load Envs:
-
-```js
-require("@noshot/env");
-
-// import "@noshot/env";
-```
-
-Note: Defining any of the Env variables below **WILL NOT** change the default behavior of `config`, `load` or `parse` methods.
-
-#### ENV_LOAD
-
-By defining an `ENV_LOAD` variable, this will let `@noshot/env` know you'd like to immediately load some `.env.*` files when the package is imported. You can pass a single file name or a list of file names separated by commas. By default, `@noshot/env` attempts to load them from within the project's **root** directory.
-
-For example:
-
-```json
-{
-  "scripts": {
-    "dev": "ENV_LOAD=.env.base,.env.local,.env.dev node app.js",
-    "prod": "ENV_LOAD=.env.prod node app.js"
-  },
-  "dependencies": {
-    "@noshot/env": "^x.x.x"
-  }
-}
-```
-
-#### ENV_DIR
-
-By defining an `ENV_DIR` variable, this will let `@noshot/env` know you'd like to load `.env.*` files from a custom directory.
-
-```json
-{
-  "scripts": {
-    "dev": "ENV_DIR=custom/path/to/directory ENV_LOAD=.env.base,.env.dev node app.js"
-  },
-  "dependencies": {
-    "@noshot/env": "^x.x.x"
-  }
-}
-```
-
-#### ENV_ENCODE
-
-By defining an `ENV_ENCODE` variable, this will let `@noshot/env` know you'd like to set the encoding type of the `.env.*` file(s). The following file encode types are supported:
-
-```
-ascii
-utf8
-utf-8 (default)
-utf16le
-ucs2
-ucs-2
-base64
-latin1
-binary
-hex
-```
-
-For example:
-
-```json
-{
-  "scripts": {
-    "dev": "ENV_LOAD=.env.dev ENV_ENCODE=latin1 node app.js"
-  },
-  "dependencies": {
-    "@noshot/env": "^x.x.x"
-  }
-}
-```
-
-#### ENV_OVERRIDE
-
-By defining an `ENV_OVERRIDE` variable, this will let `@noshot/env` know you'd like to override Envs in [`process.env`](https://nodejs.org/docs/latest/api/process.html#process_process_env).
-
-For example:
-
-```json
-{
-  "scripts": {
-    "dev": "ENV_LOAD=.env.dev ENV_DEBUG=true ENV_OVERRIDE=true node app.js"
-  },
-  "dependencies": {
-    "@noshot/env": "^x.x.x"
-  }
-}
-```
-
-#### ENV_DEBUG
-
-By defining an `ENV_DEBUG` variable within one of your package.json scripts, this will let `@noshot/env` know you'd like to be in debug mode and output the results of extracting/loading Envs.
-
-For example:
-
-```json
-{
-  "scripts": {
-    "dev": "ENV_LOAD=.env.dev ENV_DEBUG=true node app.js"
-  },
-  "dependencies": {
-    "@noshot/env": "^x.x.x"
-  }
-}
-```
+Note: Defining any of the options within the configuration file **WILL NOT** change the default behavior of `config`, `load` or `parse` methods.
 
 ## Preload
 
@@ -596,6 +470,52 @@ console.log(typeof configArgs, configArgs) // object { paths: ".env.dev", debug:
 config(configArgs) // parses .env.dev and assigns it to process.env
 ```
 
+## Extending .env Files
+
+Envs can be extended by adding `# extends:` __magic comments__ followed by `absolute/path/to/.env`. These __magic comments__ can be stacked within a single `.env.*` file:
+
+**.env.example**
+```dosini
+# extends: .env
+# extends: .env.base
+MESSAGE=Hello World
+```
+
+Output:
+```dosini
+ROOT=true
+BASE=true
+MESSAGE=Hello World
+```
+
+And/or they can be recursively extended:
+
+**.env.example**
+```dosini
+# extends: .env.base
+MESSAGE=Hello World
+```
+
+**.env.base**
+```dosini
+# extends: .env
+BASE=true
+```
+
+**.env**
+```dosini
+ROOT=true
+```
+
+Output:
+```dosini
+ROOT=true
+BASE=true
+MESSAGE=Hello World
+```
+
+⚠️ Please note that extending `.env.*` files that don't exist will silently fail.
+
 ## Interpolation
 
 Env values can be interpolated based upon a [`process.env`](https://nodejs.org/docs/latest/api/process.html#process_process_env) value, a `KEY` within the `.env.*` file, a command line substitution and/or a fallback value. 
@@ -749,7 +669,7 @@ PORT=3000
 
 `@noshot/env` will parse the files and append the Envs in the order of how they were defined in [paths](#config-paths). In the example above, the `DB_PASS` variable within `.env.base` would be overidden by `.env.dev` because `.env.dev` file was imported last and, as a result, its `DB_PASS` will be assigned to [`process.env`](https://nodejs.org/docs/latest/api/process.html#process_process_env).
 
-By default, Envs that are **pre-set** or **defined** within [`process.env`](https://nodejs.org/docs/latest/api/process.html#process_process_env) **WILL NOT be overidden**. If you wish to override variables in [`process.env`](https://nodejs.org/docs/latest/api/process.html#process_process_env) see [ENV_OVERRIDE](#env_override) or [Config Override](#config-override) or [Parse Override](#parse-override).
+By default, Envs that are **pre-set** or **defined** within [`process.env`](https://nodejs.org/docs/latest/api/process.html#process_process_env) **WILL NOT be overidden**. If you wish to override variables in [`process.env`](https://nodejs.org/docs/latest/api/process.html#process_process_env) or [Config Override](#config-override) or [Parse Override](#parse-override).
 
 ### Why doesn't the parse method automatically assign Envs?
 

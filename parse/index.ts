@@ -26,8 +26,10 @@
   OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+import { readFileSync } from "fs";
 import { execSync } from "child_process";
 import { logWarning } from "../log";
+import fileExists from "../fileExists";
 import type { Option, ParsedEnvs } from "../index";
 
 /**
@@ -100,8 +102,29 @@ export default function parse(
 
   // loops over key value pairs
   for (let i = 0; i < keyValues.length; i += 1) {
+    const VAL = keyValues[i];
     // finds matching "KEY' and 'VAL' in 'KEY=VAL'
-    const keyValueArr = keyValues[i].match(/^\s*([\w.-]+)\s*=\s*(.*)?\s*$/);
+    let keyValueArr = VAL.match(/^\s*([\w.-]+)\s*=\s*(.*)?\s*$/);
+
+    // finds matching '# extends: path/to/.env'
+    if (!keyValueArr) {
+      keyValueArr = keyValues[i].match(/(?<=# extends: ).*/g);
+
+      // checks if there's a matching extension
+      if (Array.isArray(keyValueArr)) {
+        let extended = {};
+        const [envPath] = keyValueArr;
+        // if the file exists, parse it...
+        if (fileExists(envPath))
+          extended = parse(readFileSync(envPath), override);
+
+        // and assign it to extracted
+        Object.assign(extracted, extended);
+
+        // remove extension value
+        keyValueArr = null;
+      }
+    }
 
     if (keyValueArr) {
       const key = keyValueArr[1];
