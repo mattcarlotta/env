@@ -481,7 +481,7 @@ Envs can be extended by adding __magic comments__: `# extends absolute/path/to/.
 MESSAGE=Hello World
 ```
 
-**output**
+Output:
 ```dosini
 ROOT=true
 BASE=true
@@ -507,7 +507,7 @@ BASE=true
 ROOT=true
 ```
 
-**output**
+Output:
 ```dosini
 ROOT=true
 BASE=true
