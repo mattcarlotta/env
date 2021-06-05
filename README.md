@@ -476,8 +476,8 @@ Envs can be extended by adding __magic comments__: `# extends absolute/path/to/.
 
 **.env.example**
 ```dosini
-# extends .env
-# extends .env.base
+# extends: .env
+# extends: .env.base
 MESSAGE=Hello World
 ```
 
@@ -492,13 +492,13 @@ And/or they can be recursively extended:
 
 **.env.example**
 ```dosini
-# extends .env.base
+# extends: .env.base
 MESSAGE=Hello World
 ```
 
 **.env.base**
 ```dosini
-# extends .env
+# extends: .env
 BASE=true
 ```
 

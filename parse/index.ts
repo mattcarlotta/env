@@ -106,9 +106,9 @@ export default function parse(
     // finds matching "KEY' and 'VAL' in 'KEY=VAL'
     let keyValueArr = VAL.match(/^\s*([\w.-]+)\s*=\s*(.*)?\s*$/);
 
-    // finds matching '# extends path/to/.env'
+    // finds matching '# extends: path/to/.env'
     if (!keyValueArr) {
-      keyValueArr = keyValues[i].match(/(?<=# extends ).*/g);
+      keyValueArr = keyValues[i].match(/(?<=# extends: ).*/g);
 
       // checks if there's a matching extension
       if (Array.isArray(keyValueArr)) {

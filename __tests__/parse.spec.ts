@@ -166,7 +166,7 @@ describe("Parse Method", () => {
 
   it("extends envs that contain '# extends path/to/.env'", () => {
     const result = parse(
-      Buffer.from("# extends tests/.env.extends2\nEXTENDED=true")
+      Buffer.from("# extends: tests/.env.extends2\nEXTENDED=true")
     );
 
     expect(result).toEqual({
@@ -180,7 +180,7 @@ describe("Parse Method", () => {
   it("extends envs that contain multiple '# extends path/to/.env' statements", () => {
     const result = parse(
       Buffer.from(
-        "# extends tests/.env.extends2\n# extends tests/.env.extends3\nMULTIEXTENDED=true"
+        "# extends: tests/.env.extends2\n# extends: tests/.env.extends3\nMULTIEXTENDED=true"
       )
     );
 
@@ -195,7 +195,7 @@ describe("Parse Method", () => {
 
   it("doesn't envs that contain invalid extension paths", () => {
     const result = parse(
-      Buffer.from("# extends tests/.env.invalid\nEXTENDED=false")
+      Buffer.from("# extends: tests/.env.invalid\nEXTENDED=false")
     );
 
     expect(result).toEqual({
