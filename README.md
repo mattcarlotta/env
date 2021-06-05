@@ -472,7 +472,7 @@ config(configArgs) // parses .env.dev and assigns it to process.env
 
 ## Extending .env Files
 
-Envs can be extended by adding `extends` __magic comments__: `# extends: absolute/path/to/.env`. These __magic comments__ can be stacked via multiple lines within a single `.env.*` file:
+Envs can be extended by adding `# extends:` __magic comments__ followed by `absolute/path/to/.env`. These __magic comments__ can be stacked within a single `.env.*` file:
 
 **.env.example**
 ```dosini
