@@ -163,4 +163,43 @@ describe("Parse Method", () => {
 
     expect(logWarning).toHaveBeenCalledTimes(1);
   });
+
+  it("extends envs that contain '# extends path/to/.env'", () => {
+    const result = parse(
+      Buffer.from("# extends tests/.env.extends2\nEXTENDED=true")
+    );
+
+    expect(result).toEqual({
+      ROOT: "true",
+      FIRSTNAME: "Jane",
+      LASTNAME: "Doe",
+      EXTENDED: "true"
+    });
+  });
+
+  it("extends envs that contain multiple '# extends path/to/.env' statements", () => {
+    const result = parse(
+      Buffer.from(
+        "# extends tests/.env.extends2\n# extends tests/.env.extends3\nMULTIEXTENDED=true"
+      )
+    );
+
+    expect(result).toEqual({
+      ROOT: "true",
+      FIRSTNAME: "Jane",
+      LASTNAME: "Doe",
+      MULTIPASS: "Leeloo",
+      MULTIEXTENDED: "true"
+    });
+  });
+
+  it("doesn't envs that contain invalid extension paths", () => {
+    const result = parse(
+      Buffer.from("# extends tests/.env.invalid\nEXTENDED=false")
+    );
+
+    expect(result).toEqual({
+      EXTENDED: "false"
+    });
+  });
 });
