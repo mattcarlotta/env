@@ -94,7 +94,7 @@ Heavily inspired by [dotenv](https://github.com/motdotla/dotenv) and [dotenv-exp
   - [Does this package allow submodule imports?](#does-this-package-allow-submodule-imports)
   - [How does @noshot/env work and will it override already set or predefined variables?](#how-does-noshotenv-work-and-will-it-override-already-set-or-predefined-variables)
   - [Why doesn't the parse method automatically assign Envs?](#why-doesnt-the-parse-method-automatically-assign-envs)
-  - [Are the Env variables required?](#are-the-env-variables-required)
+  - [Is the Env variable required?](#is-the-env-variable-required)
   - [How do I use ES modules?](#how-do-i-use-es-modules)
 
 [Contributing Guide](#contributing-guide)
@@ -691,9 +691,9 @@ const parsed = parse(Buffer.from("BASIC=basic")); // parse/interpolate Envs not 
 assign(parsed); // assigns parsed Envs to process.env
 ```
 
-### Are the Env variables required?
+### Is the Env variable required?
 
-To be as flexible as possible, the Env variables are not required to set Envs to [`process.env`](https://nodejs.org/docs/latest/api/process.html#process_process_env). However, you will then be required to use this package similarly to how you would use dotenv. See [Config Method](#config-method):
+To be as flexible as possible, the Env variable ([LOAD_CONFIG](#load_config)) is not required to set Envs to [`process.env`](https://nodejs.org/docs/latest/api/process.html#process_process_env). However, you will then be required to use this package similarly to how you would use dotenv:
 
 ```js
 const { config } = require("@noshot/env");
@@ -701,6 +701,8 @@ const { config } = require("@noshot/env");
 
 config({ ... });
 ```
+
+Check out the [Config Method](#config-method) and [Config Arguments](#config-argument-options) for more information about manually loading `.env.*` files.
 
 ### How do I use ES modules?
 
