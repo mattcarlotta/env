@@ -84,6 +84,8 @@ Heavily inspired by [dotenv](https://github.com/motdotla/dotenv) and [dotenv-exp
     - [env](#load-env)
     - [dir](#load-dir)
 
+[Extending .env Files](#extending-env-files)
+
 [Interpolation](#interpolation)
   - [Interpolation Rules](#interpolation-rules)
 
