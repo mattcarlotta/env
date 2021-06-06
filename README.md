@@ -338,7 +338,7 @@ You may specify the encoding [type](https://nodejs.org/api/buffer.html#buffer_bu
 ```js
 require("@noshot/env").config({ encoding: "latin1" });
 
-// import { config } from "@noshot/env"
+// import { config } from "@noshot/env";
 // config({ encoding: "latin1" });
 ```
 
@@ -351,7 +351,7 @@ You may specify whether or not to override Envs in [`process.env`](https://nodej
 ```js
 require("@noshot/env").config({ override: true });
 
-// import { config } from "@noshot/env"
+// import { config } from "@noshot/env";
 // config({ override: true });
 ```
 
@@ -364,7 +364,7 @@ You may turn on logging to help debug file loading.
 ```js
 require("@noshot/env").config({ debug: true });
 
-// import { config } from "@noshot/env"
+// import { config } from "@noshot/env";
 // config({ debug: true });
 ```
 
@@ -706,7 +706,7 @@ Check out the [Config Method](#config-method) and [Config Arguments](#config-arg
 
 ### How do I use ES modules?
 
-As of Node v12.17.0+, node removed the experimental flag for ES modules. Unfortunately, most of development world has yet to adopt ESM as the standard. Therefore, until there's more widespread support, this documentation will caution against using ESM and instead opt for CJS. In addition, node doesn't support [preloading](#preload) ESM, since it utilizes Node's `require` function. That said, this package offers **experimental** support for ESM. You can try it out by importing from the `esm` directory of the package:
+As of Node v12.17.0+, node removed the experimental flag for ES modules. Unfortunately, most of development world has yet to adopt ESM as the standard. Therefore, until there's more widespread support, this documentation will caution against using ESM and instead opt for CJS. In addition, node doesn't support [preloading](#preload) ESM, since preloading utilizes Node's `require` function. That said, this package offers **experimental** support for ESM. You can try it out by importing from the `esm` directory of the package:
 
 ```js
 import env from "@noshot/env/esm";
