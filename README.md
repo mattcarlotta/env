@@ -623,16 +623,16 @@ On the same note, most CI (continous integration) services like Github Actions a
 Yes! You can import submodules directly by their name:
 
 ```js
-const assign = require("@noshot/env/assign");
+const assign = require("@noshot/env/assign").default;
 // import assign from "@noshot/env/assign";
 
-const config = require("@noshot/env/config");
+const config = require("@noshot/env/config").default;
 // import config from "@noshot/env/config";
 
-const load = require("@noshot/env/load");
+const load = require("@noshot/env/load").default;
 // import load from "@noshot/env/load";
 
-const parse = require("@noshot/env/parse");
+const parse = require("@noshot/env/parse").default;
 // import parse from "@noshot/env/parse";
 ```
 
