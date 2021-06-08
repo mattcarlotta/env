@@ -228,12 +228,12 @@ describe("Parse Method", () => {
   it("doesn't parse envs from an invalid remote url", () => {
     const result = parse(
       Buffer.from(
-        "# uses: https://invalid.invalid.com aes-256-cbc k762mailLG90WZpIuQItp870eJNNunF5 6b85461c9929331d hex utf-8\nREMOTEFILE=true"
+        "# uses: https://invalid.invalid.com aes-256-cbc k762mailLG90WZpIuQItp870eJNNunF5 6b85461c9929331d hex utf-8\nREMOTEFILE=false"
       )
     );
 
     expect(result).toEqual({
-      REMOTEFILE: "true"
+      REMOTEFILE: "false"
     });
   });
 });

@@ -42,7 +42,9 @@ Heavily inspired by [dotenv](https://github.com/motdotla/dotenv) and [dotenv-exp
 
 ✔️ Supports overriding Envs in [`process.env`](https://nodejs.org/docs/latest/api/process.html#process_process_env)
 
-✔️ Supports [extending .env files](#extending-env-files)
+✔️ Supports [extending local .env files](#extending-local-env-files)
+
+✔️ Supports [fetching remote .env files](#fetching-remote-env-files)
 
 ✔️ Supports Env [interpolation](#interpolation)
 
@@ -84,7 +86,9 @@ Heavily inspired by [dotenv](https://github.com/motdotla/dotenv) and [dotenv-exp
     - [env](#load-env)
     - [dir](#load-dir)
 
-[Extending .env Files](#extending-env-files)
+[Extending Local .env Files](#extending-local-env-files)
+
+[Fetching Remote .env Files](#fetching-remote-env-files)
 
 [Interpolation](#interpolation)
   - [Interpolation Rules](#interpolation-rules)
@@ -472,9 +476,9 @@ console.log(typeof configArgs, configArgs) // object { paths: ".env.dev", debug:
 config(configArgs) // parses .env.dev and assigns it to process.env
 ```
 
-## Extending .env Files
+## Extending Local .env Files
 
-Envs can be extended by adding `# extends:` __magic comments__ followed by `absolute/path/to/.env`. These __magic comments__ can be stacked within a single `.env.*` file:
+Local `.env.*` file can be extended by adding `# extends:` __magic comments__ followed by `absolute/path/to/.env`. These __magic comments__ can be stacked within a single `.env.*` file:
 
 **.env.example**
 ```dosini
@@ -517,6 +521,260 @@ MESSAGE=Hello World
 ```
 
 ⚠️ Please note that extending `.env.*` files that don't exist will silently fail.
+
+## Fetching Remote .env Files
+
+⚠️ Support for this feature is in beta. It utilizes the [curl command](https://www.tutorialspoint.com/unix_commands/curl.htm) within a bash script which requires a Unix based operating system and/or Windows 10 v1803+. For now, this package expects the response body from the remote url to be encrypted plain text.
+
+Envs can be fetched by adding `# uses:` __magic comments__ followed by 6 arguments with spaces between them (**do NOT use new lines, only spaces**):
+
+```
+remoteurl: string 
+algorithm: string
+secretkey: string
+iv: string
+input: Encoding (base64 or hex)
+output: BufferEncoding
+```
+
+For example:
+
+**remote url**
+```
+https://domain.com/encryptedJSON.txt
+```
+
+**algorithm** (see list below)
+```
+aes-256-cbc
+```
+
+<details>
+<summary>Click to expand list of supported crypto algorithms</summary>
+
+```
+AES-128-CBC
+AES-128-CBC-HMAC-SHA1
+AES-128-CBC-HMAC-SHA256
+id-aes128-CCM
+AES-128-CFB
+AES-128-CFB1
+AES-128-CFB8
+AES-128-CTR
+AES-128-ECB
+id-aes128-GCM
+AES-128-OCB
+AES-128-OFB
+AES-128-XTS
+AES-192-CBC
+id-aes192-CCM
+AES-192-CFB
+AES-192-CFB1
+AES-192-CFB8
+AES-192-CTR
+AES-192-ECB
+id-aes192-GCM
+AES-192-OCB
+AES-192-OFB
+AES-256-CBC
+AES-256-CBC-HMAC-SHA1
+AES-256-CBC-HMAC-SHA256
+id-aes256-CCM
+AES-256-CFB
+AES-256-CFB1
+AES-256-CFB8
+AES-256-CTR
+AES-256-ECB
+id-aes256-GCM
+AES-256-OCB
+AES-256-OFB
+AES-256-XTS
+aes128 => AES-128-CBC
+aes128-wrap => id-aes128-wrap
+aes192 => AES-192-CBC
+aes192-wrap => id-aes192-wrap
+aes256 => AES-256-CBC
+aes256-wrap => id-aes256-wrap
+ARIA-128-CBC
+ARIA-128-CCM
+ARIA-128-CFB
+ARIA-128-CFB1
+ARIA-128-CFB8
+ARIA-128-CTR
+ARIA-128-ECB
+ARIA-128-GCM
+ARIA-128-OFB
+ARIA-192-CBC
+ARIA-192-CCM
+ARIA-192-CFB
+ARIA-192-CFB1
+ARIA-192-CFB8
+ARIA-192-CTR
+ARIA-192-ECB
+ARIA-192-GCM
+ARIA-192-OFB
+ARIA-256-CBC
+ARIA-256-CCM
+ARIA-256-CFB
+ARIA-256-CFB1
+ARIA-256-CFB8
+ARIA-256-CTR
+ARIA-256-ECB
+ARIA-256-GCM
+ARIA-256-OFB
+aria128 => ARIA-128-CBC
+aria192 => ARIA-192-CBC
+aria256 => ARIA-256-CBC
+bf => BF-CBC
+BF-CBC
+BF-CFB
+BF-ECB
+BF-OFB
+blowfish => BF-CBC
+CAMELLIA-128-CBC
+CAMELLIA-128-CFB
+CAMELLIA-128-CFB1
+CAMELLIA-128-CFB8
+CAMELLIA-128-CTR
+CAMELLIA-128-ECB
+CAMELLIA-128-OFB
+CAMELLIA-192-CBC
+CAMELLIA-192-CFB
+CAMELLIA-192-CFB1
+CAMELLIA-192-CFB8
+CAMELLIA-192-CTR
+CAMELLIA-192-ECB
+CAMELLIA-192-OFB
+CAMELLIA-256-CBC
+CAMELLIA-256-CFB
+CAMELLIA-256-CFB1
+CAMELLIA-256-CFB8
+CAMELLIA-256-CTR
+CAMELLIA-256-ECB
+CAMELLIA-256-OFB
+camellia128 => CAMELLIA-128-CBC
+camellia192 => CAMELLIA-192-CBC
+camellia256 => CAMELLIA-256-CBC
+cast => CAST5-CBC
+cast-cbc => CAST5-CBC
+CAST5-CBC
+CAST5-CFB
+CAST5-ECB
+CAST5-OFB
+ChaCha20
+ChaCha20-Poly1305
+des => DES-CBC
+DES-CBC
+DES-CFB
+DES-CFB1
+DES-CFB8
+DES-ECB
+DES-EDE
+DES-EDE-CBC
+DES-EDE-CFB
+des-ede-ecb => DES-EDE
+DES-EDE-OFB
+DES-EDE3
+DES-EDE3-CBC
+DES-EDE3-CFB
+DES-EDE3-CFB1
+DES-EDE3-CFB8
+des-ede3-ecb => DES-EDE3
+DES-EDE3-OFB
+DES-OFB
+des3 => DES-EDE3-CBC
+des3-wrap => id-smime-alg-CMS3DESwrap
+desx => DESX-CBC
+DESX-CBC
+id-aes128-CCM
+id-aes128-GCM
+id-aes128-wrap
+id-aes128-wrap-pad
+id-aes192-CCM
+id-aes192-GCM
+id-aes192-wrap
+id-aes192-wrap-pad
+id-aes256-CCM
+id-aes256-GCM
+id-aes256-wrap
+id-aes256-wrap-pad
+id-smime-alg-CMS3DESwrap
+rc2 => RC2-CBC
+rc2-128 => RC2-CBC
+rc2-40 => RC2-40-CBC
+RC2-40-CBC
+rc2-64 => RC2-64-CBC
+RC2-64-CBC
+RC2-CBC
+RC2-CFB
+RC2-ECB
+RC2-OFB
+RC4
+RC4-40
+RC4-HMAC-MD5
+seed => SEED-CBC
+SEED-CBC
+SEED-CFB
+SEED-ECB
+SEED-OFB
+sm4 => SM4-CBC
+SM4-CBC
+SM4-CFB
+SM4-CTR
+SM4-ECB
+SM4-OFB
+```
+</details>
+
+<br />
+
+**secret key**
+```
+abcdefghijklmnopqrstuv1234567890
+```
+
+**[iv (Initialization Vector)](https://en.wikipedia.org/wiki/Initialization_vector)**
+```
+05c6f2c47de0ecfe
+```
+
+**input (type of encoding used to encrypt/decrypt the JSON object)**
+```
+hex
+```
+
+**[output (type of encoding to parse a response)](https://nodejs.org/api/buffer.html#buffer_buffers_and_character_encodings)**
+```
+utf8
+```
+
+**JSON Object**
+```json
+{
+  "ABC": "123",
+  "DEF": "678",
+  "HIJ": "$ABC$DEF"
+}
+```
+
+**encryptedJSON.txt**
+```
+2ad5a38779ca444fe63773ed3771b6d9d52ceb7c6672823be594879d5dba50132f13ef647e2a69060e7e5f0f296c6fd3
+```
+
+**.env.example**
+```dosini
+# uses: https://domain.com/encryptedJSON.txt aes-256-cbc abcdefghijklmnopqrstuv1234567890 05c6f2c47de0ecfe hex utf8
+REMOTEFILE=true
+```
+
+Output:
+```dosini
+ABC=123
+DEF=456
+HIJ=123456
+REMOTE_FILE=true
+```
 
 ## Interpolation
 
