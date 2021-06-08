@@ -738,12 +738,12 @@ abcdefghijklmnopqrstuv1234567890
 05c6f2c47de0ecfe
 ```
 
-**input (type of encoding used to encrypt/decrypt the JSON object)**
+**input (type of encoding used to encrypt the JSON object)**
 ```
 hex
 ```
 
-**[output (type of encoding to parse a response)](https://nodejs.org/api/buffer.html#buffer_buffers_and_character_encodings)**
+**[output (type of encoding to decrypt the response)](https://nodejs.org/api/buffer.html#buffer_buffers_and_character_encodings)**
 ```
 utf8
 ```
