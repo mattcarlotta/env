@@ -3,6 +3,8 @@ import parse from "./parse";
 import load from "./load";
 import assign from "./assign";
 
+export type { Encoding } from "crypto";
+
 export interface ParsedEnvs {
   [name: string]: string;
 }

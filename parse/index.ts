@@ -28,9 +28,10 @@
  */
 import { readFileSync } from "fs";
 import { execSync } from "child_process";
+import crypto from "crypto";
 import { logWarning } from "../log";
 import fileExists from "../fileExists";
-import type { Option, ParsedEnvs } from "../index";
+import type { Encoding, Option, ParsedEnvs } from "../index";
 
 /**
  * Parses a string or buffer of Envs into an object.
@@ -44,6 +45,7 @@ export default function parse(
   src: string | Buffer,
   override?: Option
 ): ParsedEnvs {
+  const { assign } = Object;
   const { env } = process;
   // initialize extracted Envs object
   const extracted: ParsedEnvs = {};
@@ -119,7 +121,48 @@ export default function parse(
           extended = parse(readFileSync(envPath), override);
 
         // and assign it to extracted
-        Object.assign(extracted, extended);
+        assign(extracted, extended);
+
+        // remove extension value
+        keyValueArr = null;
+      }
+    }
+
+    if (!keyValueArr) {
+      // finds matching '# uses: remoteurl, algo, key, iv, input, output'
+      keyValueArr = keyValues[i].match(/(?<=# uses: ).*/g);
+
+      // checks if there's a match
+      if (Array.isArray(keyValueArr)) {
+        const [envRemotePath] = keyValueArr;
+
+        // splits string by space
+        const [remoteurl, algo, key, iv, input, output] =
+          envRemotePath.split(" ");
+
+        // fetch encrypted text file from remoteurl
+        const result = interpolate(`$(curl ${remoteurl})`);
+
+        if (result && typeof result === "string") {
+          // decrypt text file
+          const decrypter = crypto.createDecipheriv(algo, key, iv);
+          const decryptedEnvs = decrypter
+            .update(result, input as Encoding, output as Encoding)
+            .concat(decrypter.final(output as BufferEncoding));
+
+          const envValues = decryptedEnvs
+            // remove first "{" and last "}"
+            .replace(/^\{|\}$/gm, "")
+            // replace commas with new lines
+            .replace(/,/g, "\n")
+            // replace all quotes
+            .replace(/["']/g, "")
+            // replace first occurence of ":" to "= " for each line
+            .replace(/^([^:]*?)\s*:\s*/gm, "$1=");
+
+          // and assign it to extracted
+          assign(extracted, parse(envValues));
+        }
 
         // remove extension value
         keyValueArr = null;

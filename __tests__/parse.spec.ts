@@ -193,13 +193,47 @@ describe("Parse Method", () => {
     });
   });
 
-  it("doesn't envs that contain invalid extension paths", () => {
+  it("doesn't parse envs that contain invalid extension paths", () => {
     const result = parse(
       Buffer.from("# extends: tests/.env.invalid\nEXTENDED=false")
     );
 
     expect(result).toEqual({
       EXTENDED: "false"
+    });
+  });
+
+  it("parses envs from a remote url", () => {
+    const result = parse(
+      Buffer.from(
+        "# uses: https://gist.githubusercontent.com/mattcarlotta/501898bb46ee4740d13a2548e2690fdf/raw/bec095780324d763ca4c6103cb4c76d60048ce28/envsync.txt aes-256-cbc k762mailLG90WZpIuQItp870eJNNunF5 6b85461c9929331d hex utf-8\nREMOTEFILE=true"
+      )
+    );
+
+    expect(result).toEqual({
+      FACEBOOK_PAGE: "http://facebook.com/foo",
+      FAVICON_URL: "/favicon.ico",
+      LOCALE: "en",
+      LOGO_DOMAIN: "placekitten.com",
+      LOGO_HEIGHT: "80",
+      LOGO_URL: "http://placekitten.com.com/250/80",
+      LOGO_WIDTH: "250",
+      TAGLINE: "Your site tagline",
+      TITLE: "Your site title",
+      TWITTER_ACCOUNT: "foo",
+      REMOTEFILE: "true"
+    });
+  });
+
+  it("doesn't parse envs from an invalid remote url", () => {
+    const result = parse(
+      Buffer.from(
+        "# uses: https://invalid.invalid.com aes-256-cbc k762mailLG90WZpIuQItp870eJNNunF5 6b85461c9929331d hex utf-8\nREMOTEFILE=true"
+      )
+    );
+
+    expect(result).toEqual({
+      REMOTEFILE: "true"
     });
   });
 });
