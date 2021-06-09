@@ -847,26 +847,50 @@ On the same note, most CI (continous integration) services like Github Actions a
 Yes! You can import submodules directly by their name:
 
 ```js
+// ASSIGN (CJS - named export is different!)
+const { assignEnvs } = require("@noshot/env/assign");
 const assign = require("@noshot/env/assign").default;
-// import assign from "@noshot/env/assign";
+// ASSIGN (ESM)
+import assign from "@noshot/env/assign";
+import assign from "@noshot/env/esm/assign";
 
+// CONFIG (CJS)
+const { config } = require("@noshot/env/config");
 const config = require("@noshot/env/config").default;
-// import config from "@noshot/env/config";
+// CONFIG (ESM)
+import config from "@noshot/env/config";
+import config from "@noshot/env/esm/config";
 
+// DECRYPT (CJS)
+const { decrypt } = require("@noshot/env/decrypt");
 const decrypt = require("@noshot/env/decrypt").default;
-// import decrypt from "@noshot/env/decrypt";
+// DECRYPT (ESM)
+import decrypt from "@noshot/env/decrypt";
+import decrypt from "@noshot/env/esm/decrypt";
 
+// ENCRYPT (CJS)
+const { encrypt } = require("@noshot/env/encrypt");
 const encrypt = require("@noshot/env/encrypt").default;
-// import encrypt from "@noshot/env/encrypt";
+// ENCRYPT (ESM)
+import encrypt from "@noshot/env/encrypt";
+import encrypt from "@noshot/env/esm/encrypt";
 
+// LOAD (CJS)
+const { load } = require("@noshot/env/load");
 const load = require("@noshot/env/load").default;
-// import load from "@noshot/env/load";
+// LOAD (ESM)
+import load from "@noshot/env/load";
+import load from "@noshot/env/esm/load";
 
+// PARSE (CJS)
+const { parse } = require("@noshot/env/parse");
 const parse = require("@noshot/env/parse").default;
-// import parse from "@noshot/env/parse";
+// PARSE (ESM)
+import parse from "@noshot/env/parse";
+import parse from "@noshot/env/esm/parse";
 ```
 
-⚠️ Please note that for CommonJS imports (`require`) you'll need to import the `default` property. Unfortunately, this is a limitation of mixing ESM (which automatically imports `default`) and CJS imports (which doesn't).
+⚠️ Please note that for CommonJS imports (`require`) you'll need to import the `default` property for *default* exports. Unfortunately, this is a limitation of mixing ESM (which automatically imports `default`) and CJS imports (which doesn't). Alternatively, you can import (`require`) the named export instead.
 
 ### How does @noshot/env work and will it override already set or predefined variables?
 

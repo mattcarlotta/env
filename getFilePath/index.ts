@@ -7,6 +7,8 @@ import { join } from "path";
  * @param dir - directory of the file
  * @returns a single file path string
  */
-export default function getFilePath(file: string, dir?: string): string {
+export function getFilePath(file: string, dir?: string): string {
   return join(dir || process.cwd(), file);
 }
+
+export default getFilePath;

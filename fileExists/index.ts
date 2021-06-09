@@ -6,10 +6,12 @@ import { statSync } from "fs";
  * @param file - filename
  * @returns a boolean: whether or not the file exists
  */
-export default function fileExists(file: string): boolean {
+function fileExists(file: string): boolean {
   try {
     return statSync(file).isFile();
   } catch (e) {
     return false;
   }
 }
+
+export default fileExists;

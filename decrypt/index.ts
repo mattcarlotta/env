@@ -10,7 +10,7 @@ import type { DecryptOptions, DecryptResult } from "../index";
  * @returns an object with the following two properties: `decryptedEnvs`: a single string of "KEY=value" pairs and `decryptedResult`: original JSON object/Buffer string
  * @example decrypt({ algorithm: "aes-256-cbc", envs: "b8cb1867e4a8248c839db9cb0f1e1d", encoding: "utf8", input: "hex", iv: "05c6f2c47de0ecfe", secret: "abcdefghijklmnopqrstuv1234567890" });
  */
-export default function decrypt({
+export function decrypt({
   algorithm,
   envs,
   encoding,
@@ -49,3 +49,5 @@ export default function decrypt({
     decryptedResult
   };
 }
+
+export default decrypt;

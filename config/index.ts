@@ -14,7 +14,7 @@ import type { ConfigOptions, ConfigOutput, ParsedEnvs } from "../index";
  * @returns a single object with `parsed` and `extracted` Envs as { KEY: "value" } pairs
  * @example config({ dir: "example", paths: ".env" });
  */
-export default function config(options?: ConfigOptions): ConfigOutput {
+export function config(options?: ConfigOptions): ConfigOutput {
   // default config options
   let dir: ConfigOptions["dir"] = process.cwd();
   let paths: ConfigOptions["paths"] = [".env"];
@@ -62,3 +62,5 @@ export default function config(options?: ConfigOptions): ConfigOutput {
     extracted
   };
 }
+
+export default config;

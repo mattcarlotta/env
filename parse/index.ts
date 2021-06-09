@@ -41,10 +41,7 @@ import type { DecryptOptions, Option, ParsedEnvs } from "../index";
  * @returns a single object of all { key: value } pairs from `src`
  * @example parse(Buffer.from("JUSTICE=league\n"));
  */
-export default function parse(
-  src: string | Buffer,
-  override?: Option
-): ParsedEnvs {
+export function parse(src: string | Buffer, override?: Option): ParsedEnvs {
   const { assign } = Object;
   const { env } = process;
   // initialize extracted Envs object
@@ -194,3 +191,5 @@ export default function parse(
 
   return extracted;
 }
+
+export default parse;

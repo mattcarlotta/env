@@ -10,7 +10,7 @@ import type { CryptOptions, EncryptResult } from "../index";
  * @returns an object with the following two properties: `encryptedEvs`: encrypted string and `iv`: a random string
  * @example encrypt({ algorithm: "aes-256-cbc", envs: JSON.stringify({ "KEY": "VALUE" }), encoding: "utf8", input: "hex", secret: "abcdefghijklmnopqrstuv1234567890" });
  */
-export default function encrypt({
+export function encrypt({
   algorithm,
   envs,
   encoding,
@@ -27,3 +27,5 @@ export default function encrypt({
 
   return { encryptedEvs, iv };
 }
+
+export default encrypt;
