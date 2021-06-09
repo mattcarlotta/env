@@ -669,7 +669,7 @@ MESSAGE=Hello World
 
 ⚠️ Support for this feature is in beta. It utilizes the [curl command](https://www.tutorialspoint.com/unix_commands/curl.htm) within a bash script which requires a Unix based operating system and/or Windows 10 v1803+. For now, this package expects the response body from the remote url to be encrypted plain text.
 
-Envs can be fetched by adding `# uses:` __magic comments__ followed by 6 arguments with spaces between them (**do NOT use new lines, only spaces, and must be defined in this order**):
+Envs can be fetched by adding `# uses:` __magic comments__ followed by 6 arguments with spaces between them (**do NOT use new lines, only spaces, and they must be defined in this order**):
 
 ```
 remoteurl: string 
@@ -739,6 +739,8 @@ DEF=456
 HIJ=123456
 REMOTE_FILE=true
 ```
+
+⚠️ Please note that fetching .env.* files from an invalid URL will silently fail.
 
 ## Interpolation
 
