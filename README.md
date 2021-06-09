@@ -740,7 +740,7 @@ HIJ=123456
 REMOTE_FILE=true
 ```
 
-⚠️ Please note that fetching .env.* files from an invalid URL will silently fail.
+⚠️ Please note that fetching `.env.*` files from an invalid URL will silently fail.
 
 ## Interpolation
 
