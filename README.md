@@ -86,6 +86,18 @@ Heavily inspired by [dotenv](https://github.com/motdotla/dotenv) and [dotenv-exp
     - [env](#load-env)
     - [dir](#load-dir)
 
+[Decrypt Method](#decrypt-method)
+
+[Encrypt Method](#encrypt-method)
+
+[Encryption and Decryption Arguments](#encryption-and-decryption-arguments)
+  - [algorithm](#encryptdecrypt-algorithm)
+  - [envs](#encryptdecrypt-envs)
+  - [encoding](#encryptdecrypt-encoding)
+  - [input](#encryptdecrypt-input)
+  - [iv](#encryptdecrypt-iv)
+  - [secret](#encryptdecrypt-secret)
+  
 [Extending Local .env Files](#extending-local-env-files)
 
 [Fetching Remote .env Files](#fetching-remote-env-files)
@@ -476,6 +488,114 @@ console.log(typeof configArgs, configArgs) // object { paths: ".env.dev", debug:
 config(configArgs) // parses .env.dev and assigns it to process.env
 ```
 
+## Decrypt Method
+
+If you wish to manaully decrypt an encrypted string, then the decrypt method will parse the string and return an `Object` with `decryptedEnvs` as a string `KEY=value` string and `decryptedJSON` Envs as `{ "KEY": "value" }` parsed `JSON`.
+
+The `decrypt` method accepts a single `Object` argument with the following **required** properties: 
+```js
+{ 
+  algorithm: string, 
+  envs: string, 
+  encoding: BufferEncoding,
+  input: Encoding,
+  iv: string,
+  secret: string
+}
+```
+
+See [Encryption and Decryption Arguments](#encryption-and-decryption-arguments) for more details.
+
+
+```js
+const env = require("@noshot/env");
+// import env from "@noshot/env";
+
+const result = env.decrypt({ 
+  algorithm: "aes-256-cbc", 
+  envs: "b8cb1867e4a8248c839db9cb0f1e1d", 
+  encoding: "utf8", 
+  input: "hex", 
+  iv: "05c6f2c47de0ecfe", 
+  secret: "abcdefghijklmnopqrstuv1234567890" 
+});
+
+console.log("decryptedEnvs", result.decryptedEnvs); // a single string of "KEY=value" pairs
+console.log("decryptedJSON", result.decryptedJSON); // original { KEY: VALUE } JSON object
+```
+
+## Encrypt Method
+
+If you wish to manaully encrypt a flat stringified JSON object, then the encrypt method will encrypt the string and return an `Object` with `encryptedEvs` and an [`iv`](#encryptdecrypt-iv).
+
+The `encrypt` method accepts a single `Object` argument with the following **required** properties: 
+```js
+{ 
+  algorithm: string, 
+  envs: string, 
+  encoding: BufferEncoding,
+  input: Encoding,
+  secret: string
+}
+```
+
+See [Encryption and Decryption Arguments](#encryption-and-decryption-arguments) for more details.
+
+
+```js
+const env = require("@noshot/env");
+// import env from "@noshot/env";
+
+const result = env.encrypt({ 
+  algorithm: "aes-256-cbc", 
+  envs: JSON.stringify({ "KEY": "value" }), 
+  encoding: "utf8", 
+  input: "hex", 
+  secret: "abcdefghijklmnopqrstuv1234567890" 
+});
+
+console.log("encryptedEvs", result.encryptedEvs); // a single encrypted string
+console.log("iv", result.iv); // a random encryption/decryption string
+```
+
+## Encryption and Decryption Arguments
+
+Encryption and decryption methods share similar arguments, here's a breakdown of each one:
+
+### Encrypt/Decrypt algorithm
+
+The `algorithm` argument is a `string` that is dependent on OpenSSL, see list below for examples. On recent OpenSSL releases, `openssl list -cipher-algorithms` (`openssl list-cipher-algorithms` for older versions of OpenSSL) will display the available cipher algorithms for your version.
+
+### Encrypt/Decrypt envs
+
+The `envs` argument is, depending on the method, either a stringied JSON object ([encrypt method](#encrypt-method)) or a single encrypted string ([decrypt method](#decrypt-method)) of Envs.
+
+Encrypt:
+```
+"{ "KEY": "value" }"
+```
+
+Decrypt (value derived from the encrypt method):
+```
+b8cb1867e4a8248c839db9cb0f1e1d
+```
+
+### Encrypt/Decrypt encoding
+
+Both methods expect the `encoding` argument to be a `string` type of character [BufferEncoding](https://nodejs.org/api/buffer.html#buffer_buffers_and_character_encodings).
+
+### Encrypt/Decrypt input
+
+Both methods expect the `input` argument to be a `string` type of either `base64` or `hex`.
+
+### Encrypt/Decrypt iv
+
+The `iv`, or [Initialization Vector](https://en.wikipedia.org/wiki/Initialization_vector), is a randomly generated string that is used to encrypt or decrypt a single string. Since it's randomly generated, ideally it should not be stored on a disk accessible to the source machine. Missplacing or forgetting the iv will mean that you have to regenerate an encrypted string to retrieve a new iv. This `iv` is used in conjuction with the `secret`.
+
+### Encrypt/Decrypt secret
+
+The `secret` should be a randomly generated string that is used to encrypt or decrypt a single string. This `secret` is used in conjuction with the `iv`.
+
 ## Extending Local .env Files
 
 Local `.env.*` file can be extended by adding `# extends:` __magic comments__ followed by `absolute/path/to/.env`. These __magic comments__ can be stacked within a single `.env.*` file:
@@ -533,7 +653,7 @@ remoteurl: string
 algorithm: string
 secretkey: string
 iv: string
-input: Encoding (base64 or hex)
+input: Encoding
 output: BufferEncoding
 ```
 
@@ -548,185 +668,6 @@ https://domain.com/encryptedJSON.txt
 ```
 aes-256-cbc
 ```
-
-<details>
-<summary>Click to expand list of supported crypto algorithms</summary>
-
-```
-AES-128-CBC
-AES-128-CBC-HMAC-SHA1
-AES-128-CBC-HMAC-SHA256
-id-aes128-CCM
-AES-128-CFB
-AES-128-CFB1
-AES-128-CFB8
-AES-128-CTR
-AES-128-ECB
-id-aes128-GCM
-AES-128-OCB
-AES-128-OFB
-AES-128-XTS
-AES-192-CBC
-id-aes192-CCM
-AES-192-CFB
-AES-192-CFB1
-AES-192-CFB8
-AES-192-CTR
-AES-192-ECB
-id-aes192-GCM
-AES-192-OCB
-AES-192-OFB
-AES-256-CBC
-AES-256-CBC-HMAC-SHA1
-AES-256-CBC-HMAC-SHA256
-id-aes256-CCM
-AES-256-CFB
-AES-256-CFB1
-AES-256-CFB8
-AES-256-CTR
-AES-256-ECB
-id-aes256-GCM
-AES-256-OCB
-AES-256-OFB
-AES-256-XTS
-aes128 => AES-128-CBC
-aes128-wrap => id-aes128-wrap
-aes192 => AES-192-CBC
-aes192-wrap => id-aes192-wrap
-aes256 => AES-256-CBC
-aes256-wrap => id-aes256-wrap
-ARIA-128-CBC
-ARIA-128-CCM
-ARIA-128-CFB
-ARIA-128-CFB1
-ARIA-128-CFB8
-ARIA-128-CTR
-ARIA-128-ECB
-ARIA-128-GCM
-ARIA-128-OFB
-ARIA-192-CBC
-ARIA-192-CCM
-ARIA-192-CFB
-ARIA-192-CFB1
-ARIA-192-CFB8
-ARIA-192-CTR
-ARIA-192-ECB
-ARIA-192-GCM
-ARIA-192-OFB
-ARIA-256-CBC
-ARIA-256-CCM
-ARIA-256-CFB
-ARIA-256-CFB1
-ARIA-256-CFB8
-ARIA-256-CTR
-ARIA-256-ECB
-ARIA-256-GCM
-ARIA-256-OFB
-aria128 => ARIA-128-CBC
-aria192 => ARIA-192-CBC
-aria256 => ARIA-256-CBC
-bf => BF-CBC
-BF-CBC
-BF-CFB
-BF-ECB
-BF-OFB
-blowfish => BF-CBC
-CAMELLIA-128-CBC
-CAMELLIA-128-CFB
-CAMELLIA-128-CFB1
-CAMELLIA-128-CFB8
-CAMELLIA-128-CTR
-CAMELLIA-128-ECB
-CAMELLIA-128-OFB
-CAMELLIA-192-CBC
-CAMELLIA-192-CFB
-CAMELLIA-192-CFB1
-CAMELLIA-192-CFB8
-CAMELLIA-192-CTR
-CAMELLIA-192-ECB
-CAMELLIA-192-OFB
-CAMELLIA-256-CBC
-CAMELLIA-256-CFB
-CAMELLIA-256-CFB1
-CAMELLIA-256-CFB8
-CAMELLIA-256-CTR
-CAMELLIA-256-ECB
-CAMELLIA-256-OFB
-camellia128 => CAMELLIA-128-CBC
-camellia192 => CAMELLIA-192-CBC
-camellia256 => CAMELLIA-256-CBC
-cast => CAST5-CBC
-cast-cbc => CAST5-CBC
-CAST5-CBC
-CAST5-CFB
-CAST5-ECB
-CAST5-OFB
-ChaCha20
-ChaCha20-Poly1305
-des => DES-CBC
-DES-CBC
-DES-CFB
-DES-CFB1
-DES-CFB8
-DES-ECB
-DES-EDE
-DES-EDE-CBC
-DES-EDE-CFB
-des-ede-ecb => DES-EDE
-DES-EDE-OFB
-DES-EDE3
-DES-EDE3-CBC
-DES-EDE3-CFB
-DES-EDE3-CFB1
-DES-EDE3-CFB8
-des-ede3-ecb => DES-EDE3
-DES-EDE3-OFB
-DES-OFB
-des3 => DES-EDE3-CBC
-des3-wrap => id-smime-alg-CMS3DESwrap
-desx => DESX-CBC
-DESX-CBC
-id-aes128-CCM
-id-aes128-GCM
-id-aes128-wrap
-id-aes128-wrap-pad
-id-aes192-CCM
-id-aes192-GCM
-id-aes192-wrap
-id-aes192-wrap-pad
-id-aes256-CCM
-id-aes256-GCM
-id-aes256-wrap
-id-aes256-wrap-pad
-id-smime-alg-CMS3DESwrap
-rc2 => RC2-CBC
-rc2-128 => RC2-CBC
-rc2-40 => RC2-40-CBC
-RC2-40-CBC
-rc2-64 => RC2-64-CBC
-RC2-64-CBC
-RC2-CBC
-RC2-CFB
-RC2-ECB
-RC2-OFB
-RC4
-RC4-40
-RC4-HMAC-MD5
-seed => SEED-CBC
-SEED-CBC
-SEED-CFB
-SEED-ECB
-SEED-OFB
-sm4 => SM4-CBC
-SM4-CBC
-SM4-CFB
-SM4-CTR
-SM4-ECB
-SM4-OFB
-```
-</details>
-
-<br />
 
 **secret key**
 ```

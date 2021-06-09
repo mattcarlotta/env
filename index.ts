@@ -1,8 +1,10 @@
 import type { Encoding } from "crypto";
+import assign from "./assign";
 import config from "./config";
+import encrypt from "./encrypt";
+import decrypt from "./decrypt";
 import parse from "./parse";
 import load from "./load";
-import assign from "./assign";
 
 export type { Encoding };
 
@@ -69,11 +71,13 @@ export interface ConfigOutput {
   }
 })();
 
-export { assign, config, load, parse };
+export { assign, config, decrypt, encrypt, load, parse };
 
 const env = {
   assign,
   config,
+  decrypt,
+  encrypt,
   load,
   parse
 };
