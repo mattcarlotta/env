@@ -1,4 +1,4 @@
-import type { Encoding } from "crypto";
+import type { CipherKey, Encoding } from "crypto";
 import assign from "./assign";
 import config from "./config";
 import encrypt from "./encrypt";
@@ -6,14 +6,14 @@ import decrypt from "./decrypt";
 import parse from "./parse";
 import load from "./load";
 
-export type { Encoding };
+export type { CipherKey, Encoding };
 
 export type CryptOptions = {
   algorithm: string;
   envs: string;
   encoding: Encoding;
   input: Encoding;
-  secret: string;
+  secret: CipherKey;
 };
 
 export type EncryptResult = {

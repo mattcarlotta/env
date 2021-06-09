@@ -407,10 +407,10 @@ const { parse } = require("@noshot/env");
 // import { parse } from "@noshot/env";
 
 const config = parse(Buffer.from("BASIC=basic")); // will return an object
-console.log(typeof config, config); // object { BASIC : 'basic' }
+console.log(typeof config, config); // object - { BASIC : 'basic' }
 
 const results = parse(readFileSync("path/to/.env.file", { encoding: "utf8" })); // will return an object
-console.log(typeof results, results); // object { KEY : 'value' }
+console.log(typeof results, results); // object - { KEY : 'value' }
 ```
 
 Note: If you're attempting to parse Envs that have already been defined within [`process.env`](https://nodejs.org/docs/latest/api/process.html#process_process_env), then you must pass `parse` an [override](#parse-override) argument.
@@ -426,10 +426,10 @@ const { parse } = require("@noshot/env");
 // import { parse } from "@noshot/env";
 
 const config = parse(Buffer.from("BASIC=basic"), true); // will return an object
-console.log(typeof config, config); // object { BASIC : 'basic' }
+console.log(typeof config, config); // object - { BASIC : 'basic' }
 
 const result = parse(readFileSync("path/to/.env.file", { encoding: "utf8" }), true); // will return an object
-console.log(typeof result, result); // object { OVERRIDEKEY : 'value' }
+console.log(typeof result, result); // object - { OVERRIDEKEY : 'value' }
 ```
 
 ### Parse Rules
@@ -471,7 +471,7 @@ const { config, load } = require("@noshot/env");
 // import { config, load } from "@noshot/env";
 
 const configArgs = load("development"); // will return an object of config arguments
-console.log(typeof configArgs, configArgs) // object { paths: ".env.dev", debug: true }
+console.log(typeof configArgs, configArgs) // object - { paths: ".env.dev", debug: true }
 config(configArgs) // parses .env.dev and assigns it to process.env
 ```
 
@@ -484,7 +484,7 @@ const { config, load } = require("@noshot/env");
 // import { config, load } from "@noshot/env";
 
 const configArgs = load("development", "path/to/custom/directory"); // will return an object of config arguments
-console.log(typeof configArgs, configArgs) // object { paths: ".env.dev", debug: true }
+console.log(typeof configArgs, configArgs) // object - { paths: ".env.dev", debug: true }
 config(configArgs) // parses .env.dev and assigns it to process.env
 ```
 
@@ -492,7 +492,7 @@ config(configArgs) // parses .env.dev and assigns it to process.env
 
 If you wish to manaully decrypt an encrypted string, then the decrypt method will parse the string and return an `Object` with `decryptedEnvs` as a string `KEY=value` string and `decryptedJSON` Envs as `{ "KEY": "value" }` parsed `JSON`.
 
-The `decrypt` method accepts a single `Object` argument with the following **required** properties: 
+The `decrypt` method accepts a single `Object` argument with the following **required** properties (see [Encryption and Decryption Arguments](#encryption-and-decryption-arguments) for more details): 
 ```js
 { 
   algorithm: string, 
@@ -500,13 +500,11 @@ The `decrypt` method accepts a single `Object` argument with the following **req
   encoding: BufferEncoding,
   input: Encoding,
   iv: string,
-  secret: string
+  secret: CipherKey
 }
 ```
 
-See [Encryption and Decryption Arguments](#encryption-and-decryption-arguments) for more details.
-
-
+Example:
 ```js
 const env = require("@noshot/env");
 // import env from "@noshot/env";
@@ -520,28 +518,26 @@ const result = env.decrypt({
   secret: "abcdefghijklmnopqrstuv1234567890" 
 });
 
-console.log("decryptedEnvs", result.decryptedEnvs); // a single string of "KEY=value" pairs
-console.log("decryptedJSON", result.decryptedJSON); // original { KEY: VALUE } JSON object
+console.log(typeof decryptedEnvs, result.decryptedEnvs); // string - a single string of "KEY=value" pairs
+console.log(typeof decryptedJSON, result.decryptedJSON); // object - { KEY: VALUE } JSON object
 ```
 
 ## Encrypt Method
 
 If you wish to manaully encrypt a flat stringified JSON object, then the encrypt method will encrypt the string and return an `Object` with `encryptedEvs` and an [`iv`](#encryptdecrypt-iv).
 
-The `encrypt` method accepts a single `Object` argument with the following **required** properties: 
+The `encrypt` method accepts a single `Object` argument with the following **required** properties (see [Encryption and Decryption Arguments](#encryption-and-decryption-arguments) for more details): 
 ```js
 { 
   algorithm: string, 
   envs: string, 
   encoding: BufferEncoding,
   input: Encoding,
-  secret: string
+  secret: CipherKey
 }
 ```
 
-See [Encryption and Decryption Arguments](#encryption-and-decryption-arguments) for more details.
-
-
+Example:
 ```js
 const env = require("@noshot/env");
 // import env from "@noshot/env";
@@ -554,8 +550,8 @@ const result = env.encrypt({
   secret: "abcdefghijklmnopqrstuv1234567890" 
 });
 
-console.log("encryptedEvs", result.encryptedEvs); // a single encrypted string
-console.log("iv", result.iv); // a random encryption/decryption string
+console.log(typeof encryptedEvs, result.encryptedEvs); // string - a single encrypted string
+console.log(typeof iv, result.iv); // string - a random encryption/decryption string
 ```
 
 ## Encryption and Decryption Arguments
@@ -568,7 +564,7 @@ The `algorithm` argument is a `string` that is dependent on OpenSSL, see list be
 
 ### Encrypt/Decrypt envs
 
-The `envs` argument is, depending on the method, either a stringied JSON object ([encrypt method](#encrypt-method)) or a single encrypted string ([decrypt method](#decrypt-method)) of Envs.
+The `envs` argument is, depending on the method, either a stringified JSON object ([encrypt method](#encrypt-method)) or a single encrypted string ([decrypt method](#decrypt-method)) of Envs.
 
 Encrypt:
 ```
@@ -590,11 +586,11 @@ Both methods expect the `input` argument to be a `string` type of either `base64
 
 ### Encrypt/Decrypt iv
 
-The `iv`, or [Initialization Vector](https://en.wikipedia.org/wiki/Initialization_vector), is a randomly generated string that is used to encrypt or decrypt a single string. Since it's randomly generated, ideally it should not be stored on a disk accessible to the source machine. Missplacing or forgetting the iv will mean that you have to regenerate an encrypted string to retrieve a new iv. This `iv` is used in conjuction with the `secret`.
+The `iv`, or [Initialization Vector](https://en.wikipedia.org/wiki/Initialization_vector), is a randomly generated string that is used to encrypt or decrypt a single string. Since it's randomly generated and unique to when it was created, ideally, it should be stored on a disk inaccessible to the source machine. Missplacing or forgetting the `iv` will mean that you have to regenerate a new encrypted string to retrieve a new iv. This `iv` should **never** be commited to version control!
 
 ### Encrypt/Decrypt secret
 
-The `secret` should be a randomly generated string that is used to encrypt or decrypt a single string. This `secret` is used in conjuction with the `iv`.
+The `secret` should be a randomly generated [CipherKey (see `key`)](https://nodejs.org/api/crypto.html#crypto_crypto_createcipheriv_algorithm_key_iv_options) that is one byte in length and is used to encrypt or decrypt a single string. This `secret` should **never** be commited to version control!
 
 ## Extending Local .env Files
 
