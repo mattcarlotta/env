@@ -97,6 +97,8 @@ Heavily inspired by [dotenv](https://github.com/motdotla/dotenv) and [dotenv-exp
   - [input](#encryptdecrypt-input)
   - [iv](#encryptdecrypt-iv)
   - [secret](#encryptdecrypt-secret)
+
+[Encryption and Decryption Limitations](#encryption-and-decryption-limitations)
   
 [Extending Local .env Files](#extending-local-env-files)
 
@@ -347,9 +349,9 @@ require("@noshot/env").config({ dir: "custom/path/to/directory", paths: [".env",
 
 #### Config encoding
 
-**Default:** `utf-8`
+**Default:** `utf8`
 
-You may specify the encoding [type](https://nodejs.org/api/buffer.html#buffer_buffers_and_character_encodings) of your file containing environment variables.
+You may specify the character encoding [type](https://nodejs.org/api/buffer.html#buffer_buffers_and_character_encodings) of your file containing environment variables.
 
 ```js
 require("@noshot/env").config({ encoding: "latin1" });
@@ -490,7 +492,7 @@ config(configArgs) // parses .env.dev and assigns it to process.env
 
 ## Decrypt Method
 
-If you wish to manaully decrypt an encrypted string, then the decrypt method will parse the string and return an `Object` with `decryptedEnvs` as a string `KEY=value` string and `decryptedJSON` Envs as `{ "KEY": "value" }` parsed `JSON`.
+If you wish to manaully decrypt an encrypted string, then the decrypt method will parse the encrypted string and return an `Object` with `decryptedEnvs` as a single string of `KEY=value` pairs and a `decryptedResult` as either decrypted parsed `JSON` or a decrypted `Buffer`.
 
 The `decrypt` method accepts a single `Object` argument with the following **required** properties (see [Encryption and Decryption Arguments](#encryption-and-decryption-arguments) for more details): 
 ```js
@@ -519,18 +521,19 @@ const result = env.decrypt({
 });
 
 console.log(typeof decryptedEnvs, result.decryptedEnvs); // string - a single string of "KEY=value" pairs
-console.log(typeof decryptedJSON, result.decryptedJSON); // object - { KEY: VALUE } JSON object
+console.log(typeof decryptedResult, result.decryptedResult); // object - { "KEY": "VALUE" } as JSON object
+// console.log(typeof decryptedResult, result.decryptedResult); // object - <Buffer xx xx xx ...etc>
 ```
 
 ## Encrypt Method
 
-If you wish to manaully encrypt a flat stringified JSON object, then the encrypt method will encrypt the string and return an `Object` with `encryptedEvs` and an [`iv`](#encryptdecrypt-iv).
+If you wish to manaully encrypt a flat stringified JSON object or a Buffer, then the encrypt method will encrypt the string/Buffer and return an `Object` with `encryptedEvs` and an [`iv`](#encryptdecrypt-iv).
 
 The `encrypt` method accepts a single `Object` argument with the following **required** properties (see [Encryption and Decryption Arguments](#encryption-and-decryption-arguments) for more details): 
 ```js
 { 
   algorithm: string, 
-  envs: string (stringified JSON), 
+  envs: string (stringified JSON object) | Buffer, 
   encoding: BufferEncoding,
   input: Encoding,
   secret: CipherKey
@@ -556,7 +559,7 @@ console.log(typeof iv, result.iv); // string - a random encryption/decryption st
 
 ## Encryption and Decryption Arguments
 
-Encryption and decryption methods share similar arguments, here's a breakdown of each one:
+Encryption and decryption methods share similar arguments and here's a breakdown of each one:
 
 ### Encrypt/Decrypt algorithm
 
@@ -564,14 +567,18 @@ The `algorithm` argument is a `string` that is dependent on OpenSSL. On recent O
 
 ### Encrypt/Decrypt envs
 
-The `envs` argument is, depending on the method, either a stringified JSON object ([encrypt method](#encrypt-method)) or a single encrypted string ([decrypt method](#decrypt-method)) of Envs.
+The `envs` argument is, depending on the method, either a stringified JSON object or a Buffer for the [encrypt method](#encrypt-method); or, a single encrypted string of Envs for the [decrypt method](#decrypt-method).
 
-Encrypt:
+Encrypt (JSON string):
+```js
+const jsonString = JSON.stringify({ "KEY": "value" });
 ```
-"{ "KEY": "value" }"
+Encrypt (Buffer):
+```js
+const buf = Buffer.from("KEY=value");
 ```
 
-Decrypt (value derived from the encrypt method):
+Decrypt (a stringified value derived from the encrypt method):
 ```
 b8cb1867e4a8248c839db9cb0f1e1d
 ```
@@ -591,6 +598,26 @@ The `iv`, or [Initialization Vector](https://en.wikipedia.org/wiki/Initializatio
 ### Encrypt/Decrypt secret
 
 The `secret` should be a randomly generated [CipherKey (see `key`)](https://nodejs.org/api/crypto.html#crypto_crypto_createcipheriv_algorithm_key_iv_options) that is one byte in length and is used to encrypt or decrypt a single string. This `secret` should **never** be commited to version control!
+
+
+### Encryption and Decryption Limitations
+
+Due to the decryption method converting stringified JSON Envs to a non-standard format: `KEY=value`, double/single quotes can **NOT** be used in values (there's no performant way to only remove surrounding quotes from a `"KEY"` and a `'"value"'` without splitting key-value pairs into individual strings, removing the extraneous surrounding quotes, then rechunking them into pairs). Instead, it's recommended that you use a Buffer to retain quotes:
+
+For example, instead of using JSON:
+```json
+{
+  "ABC": "123",
+  "DEF": '"   567   "'
+}
+```
+
+Use a Buffer:
+```js
+const buf = Buffer.from(`ABC=123\nDEF="  567  "`);
+```
+
+On thate note, all interpolated values that follow the [interpolation rules](#interpolation-rules) are supported.
 
 ## Extending Local .env Files
 
@@ -642,15 +669,15 @@ MESSAGE=Hello World
 
 ⚠️ Support for this feature is in beta. It utilizes the [curl command](https://www.tutorialspoint.com/unix_commands/curl.htm) within a bash script which requires a Unix based operating system and/or Windows 10 v1803+. For now, this package expects the response body from the remote url to be encrypted plain text.
 
-Envs can be fetched by adding `# uses:` __magic comments__ followed by 6 arguments with spaces between them (**do NOT use new lines, only spaces**):
+Envs can be fetched by adding `# uses:` __magic comments__ followed by 6 arguments with spaces between them (**do NOT use new lines, only spaces, and must be defined in this order**):
 
 ```
 remoteurl: string 
 algorithm: string
+input: Encoding
+encoding: BufferEncoding
 secretkey: string
 iv: string
-input: Encoding
-output: BufferEncoding
 ```
 
 For example:
@@ -665,16 +692,6 @@ https://domain.com/encryptedJSON.txt
 aes-256-cbc
 ```
 
-[**secret**](#encryptdecrypt-secret)
-```
-abcdefghijklmnopqrstuv1234567890
-```
-
-[**iv**](#encryptdecrypt-iv)
-```
-05c6f2c47de0ecfe
-```
-
 [**input**](#encryptdecrypt-input)
 ```
 hex
@@ -683,6 +700,16 @@ hex
 [**encoding**](#encryptdecrypt-encoding)
 ```
 utf8
+```
+
+[**secret**](#encryptdecrypt-secret)
+```
+abcdefghijklmnopqrstuv1234567890
+```
+
+[**iv**](#encryptdecrypt-iv)
+```
+05c6f2c47de0ecfe
 ```
 
 **JSON Object**
@@ -701,7 +728,7 @@ utf8
 
 **.env.example**
 ```dosini
-# uses: https://domain.com/encryptedJSON.txt aes-256-cbc abcdefghijklmnopqrstuv1234567890 05c6f2c47de0ecfe hex utf8
+# uses: https://domain.com/encryptedJSON.txt aes-256-cbc hex utf8 abcdefghijklmnopqrstuv1234567890 05c6f2c47de0ecfe
 REMOTEFILE=true
 ```
 

@@ -8,13 +8,13 @@ import load from "./load";
 
 export type { CipherKey, Encoding };
 
-export type CryptOptions = {
+export interface CryptOptions {
   algorithm: string;
-  envs: string;
+  envs: string | Buffer;
   encoding: Encoding;
   input: Encoding;
   secret: CipherKey;
-};
+}
 
 export type EncryptResult = {
   encryptedEvs: string;
@@ -23,12 +23,13 @@ export type EncryptResult = {
 
 export type DecryptResult = {
   decryptedEnvs: string;
-  decryptedJSON: any;
+  decryptedResult: any;
 };
 
-export type DecryptOptions = CryptOptions & {
+export interface DecryptOptions extends CryptOptions {
+  envs: string;
   iv: string;
-};
+}
 
 export interface ParsedEnvs {
   [name: string]: string;

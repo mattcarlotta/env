@@ -104,46 +104,50 @@ export default function parse(
 
   // loops over key value pairs
   for (let i = 0; i < keyValues.length; i += 1) {
-    const VAL = keyValues[i];
+    const KEYVAL = keyValues[i];
     // finds matching "KEY' and 'VAL' in 'KEY=VAL'
-    let keyValueArr = VAL.match(/^\s*([\w.-]+)\s*=\s*(.*)?\s*$/);
+    let keyValueArr = KEYVAL.match(/^\s*([\w.-]+)\s*=\s*(.*)?\s*$/);
 
     // finds matching '# extends: path/to/.env'
     if (!keyValueArr) {
-      keyValueArr = keyValues[i].match(/(?<=# extends: ).*/g);
+      keyValueArr = KEYVAL.match(/(?<=# extends: ).*/g);
 
       // checks if there's a matching extension
       if (Array.isArray(keyValueArr)) {
         let extended = {};
+
+        // destructure the path to the env from array
         const [envPath] = keyValueArr;
+
         // if the file exists, parse it...
         if (fileExists(envPath))
           extended = parse(readFileSync(envPath), override);
 
-        // and assign it to extracted
+        // and assign any parsed Envs to extracted
         assign(extracted, extended);
 
-        // remove extension value
+        // remove "extends" line
         keyValueArr = null;
       }
     }
 
     if (!keyValueArr) {
-      // finds matching '# uses: remoteurl, algorithm, secret, iv, input, encoding'
-      keyValueArr = keyValues[i].match(/(?<=# uses: ).*/g);
+      // finds matching '# uses: remoteurl, algorithm, input, encoding, secret, iv'
+      keyValueArr = KEYVAL.match(/(?<=# uses: ).*/g);
 
       // checks if there's a match
       if (Array.isArray(keyValueArr)) {
         const [envRemotePath] = keyValueArr;
 
         // splits string by space
-        const [remoteurl, algorithm, secret, iv, input, encoding] =
+        const [remoteurl, algorithm, input, encoding, secret, iv] =
           envRemotePath.split(" ");
 
         // fetch encrypted string from remoteurl
-        const envs = interpolate(`$(curl ${remoteurl})`);
+        const envs = interpolate(`$(curl -s ${remoteurl})`);
 
         if (envs && typeof envs === "string") {
+          // decrypt the encrypted string and convert stringified JSON to Env "KEY=value" pairs
           const { decryptedEnvs } = decrypt({
             algorithm,
             encoding,
@@ -153,11 +157,11 @@ export default function parse(
             secret
           } as DecryptOptions);
 
-          // and assign it to extracted
+          // assign Envs to extracted
           assign(extracted, parse(decryptedEnvs));
         }
 
-        // remove extension value
+        // remove "uses" line
         keyValueArr = null;
       }
     }

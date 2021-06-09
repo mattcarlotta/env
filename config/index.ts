@@ -20,7 +20,7 @@ export default function config(options?: ConfigOptions): ConfigOutput {
   let paths: ConfigOptions["paths"] = [".env"];
   let debug: ConfigOptions["debug"];
   let override: ConfigOptions["override"];
-  let encoding: ConfigOptions["encoding"] = "utf-8";
+  let encoding: ConfigOptions["encoding"] = "utf8";
 
   // override default options with config options arguments
   if (options) {

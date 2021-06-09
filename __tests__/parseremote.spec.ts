@@ -16,7 +16,7 @@ describe("Parse Remoth Files Method", () => {
   it("parses envs from a remote url", () => {
     const result = parse(
       Buffer.from(
-        "# uses: https://good.url.com aes-256-cbc k762mailLG90WZpIuQItp870eJNNunF5 6b85461c9929331d hex utf-8\nREMOTEFILE=true"
+        "# uses: https://good.url.com aes-256-cbc hex utf8 k762mailLG90WZpIuQItp870eJNNunF5 6b85461c9929331d\nREMOTEFILE=true"
       )
     );
 
@@ -42,7 +42,7 @@ describe("Parse Remoth Files Method", () => {
   it("doesn't parse envs from an invalid remote url", () => {
     const result = parse(
       Buffer.from(
-        "# uses: https://invalid.invalid.com aes-256-cbc k762mailLG90WZpIuQItp870eJNNunF5 6b85461c9929331d hex utf-8\nREMOTEFILE=false"
+        "# uses: https://invalid.invalid.com aes-256-cbc hex utf8 k762mailLG90WZpIuQItp870eJNNunF5 6b85461c9929331d\nREMOTEFILE=false"
       )
     );
 
