@@ -44,7 +44,7 @@ Heavily inspired by [dotenv](https://github.com/motdotla/dotenv) and [dotenv-exp
 
 ✔️ Supports [extending local .env files](#extending-local-env-files)
 
-✔️ Supports [fetching remote .env files](#fetching-remote-env-files)
+✔️ Supports [fetching remote .env files](#fetching-remote-env-files) (beta)
 
 ✔️ Supports Env [encryption](#encrypt-method) and [decryption](#decrypt-method)
 
