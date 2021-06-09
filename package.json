@@ -76,6 +76,9 @@
       "paths": {
         "@noshot/env": [
           "."
+        ],
+        "@noshot/env/*": [
+          "./*"
         ]
       }
     }
