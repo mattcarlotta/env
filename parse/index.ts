@@ -28,9 +28,10 @@
  */
 import { readFileSync } from "fs";
 import { execSync } from "child_process";
+import decrypt from "../decrypt";
 import { logWarning } from "../log";
 import fileExists from "../fileExists";
-import type { Option, ParsedEnvs } from "../index";
+import type { DecryptOptions, Option, ParsedEnvs } from "../index";
 
 /**
  * Parses a string or buffer of Envs into an object.
@@ -38,12 +39,10 @@ import type { Option, ParsedEnvs } from "../index";
  * @param src - contents to be parsed (string | Buffer)
  * @param override - allows extracted Envs to be parsed regardless if `process.env` has the properties defined (boolean | string)
  * @returns a single object of all { key: value } pairs from `src`
- * @example parse(Buffer.from("JUSTICE=league\n"))
+ * @example parse(Buffer.from("JUSTICE=league\n"));
  */
-export default function parse(
-  src: string | Buffer,
-  override?: Option
-): ParsedEnvs {
+export function parse(src: string | Buffer, override?: Option): ParsedEnvs {
+  const { assign } = Object;
   const { env } = process;
   // initialize extracted Envs object
   const extracted: ParsedEnvs = {};
@@ -102,26 +101,64 @@ export default function parse(
 
   // loops over key value pairs
   for (let i = 0; i < keyValues.length; i += 1) {
-    const VAL = keyValues[i];
+    const KEYVAL = keyValues[i];
     // finds matching "KEY' and 'VAL' in 'KEY=VAL'
-    let keyValueArr = VAL.match(/^\s*([\w.-]+)\s*=\s*(.*)?\s*$/);
+    let keyValueArr = KEYVAL.match(/^\s*([\w.-]+)\s*=\s*(.*)?\s*$/);
 
     // finds matching '# extends: path/to/.env'
     if (!keyValueArr) {
-      keyValueArr = keyValues[i].match(/(?<=# extends: ).*/g);
+      keyValueArr = KEYVAL.match(/(?<=# extends: ).*/g);
 
       // checks if there's a matching extension
       if (Array.isArray(keyValueArr)) {
         let extended = {};
+
+        // destructure the path to the env from array
         const [envPath] = keyValueArr;
+
         // if the file exists, parse it...
         if (fileExists(envPath))
           extended = parse(readFileSync(envPath), override);
 
-        // and assign it to extracted
-        Object.assign(extracted, extended);
+        // and assign any parsed Envs to extracted
+        assign(extracted, extended);
 
-        // remove extension value
+        // remove "extends" line
+        keyValueArr = null;
+      }
+    }
+
+    if (!keyValueArr) {
+      // finds matching '# uses: remoteurl, algorithm, input, encoding, secret, iv'
+      keyValueArr = KEYVAL.match(/(?<=# uses: ).*/g);
+
+      // checks if there's a match
+      if (Array.isArray(keyValueArr)) {
+        const [envRemotePath] = keyValueArr;
+
+        // splits string by space
+        const [remoteurl, algorithm, input, encoding, secret, iv] =
+          envRemotePath.split(" ");
+
+        // fetch encrypted string from remoteurl
+        const envs = interpolate(`$(curl -s ${remoteurl})`);
+
+        if (envs && typeof envs === "string") {
+          // decrypt the encrypted string and convert stringified JSON to Env "KEY=value" pairs
+          const { decryptedEnvs } = decrypt({
+            algorithm,
+            encoding,
+            envs,
+            input,
+            iv,
+            secret
+          } as DecryptOptions);
+
+          // assign Envs to extracted
+          assign(extracted, parse(decryptedEnvs));
+        }
+
+        // remove "uses" line
         keyValueArr = null;
       }
     }
@@ -154,3 +191,5 @@ export default function parse(
 
   return extracted;
 }
+
+export default parse;

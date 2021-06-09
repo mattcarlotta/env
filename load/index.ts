@@ -11,9 +11,9 @@ import type { ConfigOptions } from "../index";
  * @param env - the environment to be loaded
  * @param dir - the directory where the config is located
  * @returns a config file as { key: value } pairs to be used with the `config` function
- * @example load("development")
+ * @example load("development");
  */
-export default function load(env: string, dir?: string): ConfigOptions {
+export function load(env: string, dir?: string): ConfigOptions {
   try {
     const configName = "env.config.json";
     const configPath = getFilePath(configName, dir);
@@ -52,3 +52,5 @@ export default function load(env: string, dir?: string): ConfigOptions {
     return {} as ConfigOptions;
   }
 }
+
+export default load;

@@ -1,7 +1,35 @@
+import type { CipherKey, Encoding } from "crypto";
+import assign from "./assign";
 import config from "./config";
+import encrypt from "./encrypt";
+import decrypt from "./decrypt";
 import parse from "./parse";
 import load from "./load";
-import assign from "./assign";
+
+export type { CipherKey, Encoding };
+
+export interface CryptOptions {
+  algorithm: string;
+  envs: string | Buffer;
+  encoding: Encoding;
+  input: Encoding;
+  secret: CipherKey;
+}
+
+export type EncryptResult = {
+  encryptedEvs: string;
+  iv: string;
+};
+
+export type DecryptResult = {
+  decryptedEnvs: string;
+  decryptedResult: any;
+};
+
+export interface DecryptOptions extends CryptOptions {
+  envs: string;
+  iv: string;
+}
 
 export interface ParsedEnvs {
   [name: string]: string;
@@ -44,11 +72,13 @@ export interface ConfigOutput {
   }
 })();
 
-export { assign, config, load, parse };
+export { assign, config, decrypt, encrypt, load, parse };
 
 const env = {
   assign,
   config,
+  decrypt,
+  encrypt,
   load,
   parse
 };

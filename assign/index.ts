@@ -5,6 +5,8 @@ import type { ParsedEnvs, ProcessEnv } from "../index";
  *
  * @param config - ParsedEnvs
  */
-export default function assignEnvs(config: ParsedEnvs): ProcessEnv {
+export function assignEnvs(config: ParsedEnvs): ProcessEnv {
   return Object.assign(process.env, config) as ProcessEnv;
 }
+
+export default assignEnvs;

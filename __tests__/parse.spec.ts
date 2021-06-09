@@ -193,7 +193,7 @@ describe("Parse Method", () => {
     });
   });
 
-  it("doesn't envs that contain invalid extension paths", () => {
+  it("doesn't parse envs that contain invalid extension paths", () => {
     const result = parse(
       Buffer.from("# extends: tests/.env.invalid\nEXTENDED=false")
     );

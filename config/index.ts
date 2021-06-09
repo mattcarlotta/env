@@ -12,15 +12,15 @@ import type { ConfigOptions, ConfigOutput, ParsedEnvs } from "../index";
  *
  * @param options - accepts: { `dir`: string, `paths`: string | string[], `encoding`: BufferEncoding, `override`: boolean | string, `debug`: boolean | string }
  * @returns a single object with `parsed` and `extracted` Envs as { KEY: "value" } pairs
- * @example config({ dir: "example", paths: ".env" })
+ * @example config({ dir: "example", paths: ".env" });
  */
-export default function config(options?: ConfigOptions): ConfigOutput {
+export function config(options?: ConfigOptions): ConfigOutput {
   // default config options
   let dir: ConfigOptions["dir"] = process.cwd();
   let paths: ConfigOptions["paths"] = [".env"];
   let debug: ConfigOptions["debug"];
   let override: ConfigOptions["override"];
-  let encoding: ConfigOptions["encoding"] = "utf-8";
+  let encoding: ConfigOptions["encoding"] = "utf8";
 
   // override default options with config options arguments
   if (options) {
@@ -62,3 +62,5 @@ export default function config(options?: ConfigOptions): ConfigOutput {
     extracted
   };
 }
+
+export default config;

@@ -2,10 +2,10 @@
 /**
  * A utility function that attempts to `import`/`require` a JavaScript `env.config.(m)js` file.
  *
- * @param {string} module - path to config file
- * @returns {object} an object configuration
+ * @param module - path to config file
+ * @returns an object configuration
  */
-export default async function importModule(module: string): Promise<any> {
+export async function importModule(module: string): Promise<any> {
   try {
     return require(module);
   } catch (err) {
@@ -16,3 +16,5 @@ export default async function importModule(module: string): Promise<any> {
     throw err;
   }
 }
+
+export default importModule;

@@ -5,6 +5,8 @@ import compressFiles from "@noshot/utils/compressFiles";
     const dirs = [
       "assign",
       "config",
+      "decrypt",
+      "encrypt",
       "fileExists",
       "getFilePath",
       // "importFile",

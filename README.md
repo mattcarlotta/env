@@ -42,7 +42,11 @@ Heavily inspired by [dotenv](https://github.com/motdotla/dotenv) and [dotenv-exp
 
 ✔️ Supports overriding Envs in [`process.env`](https://nodejs.org/docs/latest/api/process.html#process_process_env)
 
-✔️ Supports [extending .env files](#extending-env-files)
+✔️ Supports [extending local .env files](#extending-local-env-files)
+
+✔️ Supports [fetching remote .env files](#fetching-remote-env-files) (beta)
+
+✔️ Supports Env [encryption](#encrypt-method) and [decryption](#decrypt-method)
 
 ✔️ Supports Env [interpolation](#interpolation)
 
@@ -55,8 +59,6 @@ Heavily inspired by [dotenv](https://github.com/motdotla/dotenv) and [dotenv-exp
 [Installation](#installation)
 
 [Usage](#usage)
-
-[Examples](https://github.com/no-shot/env-examples)
 
 [Env Configuration File](#env-configuration-file)
 
@@ -84,7 +86,23 @@ Heavily inspired by [dotenv](https://github.com/motdotla/dotenv) and [dotenv-exp
     - [env](#load-env)
     - [dir](#load-dir)
 
-[Extending .env Files](#extending-env-files)
+[Decrypt Method](#decrypt-method)
+
+[Encrypt Method](#encrypt-method)
+
+[Encryption and Decryption Arguments](#encryption-and-decryption-arguments)
+  - [algorithm](#encryptdecrypt-algorithm)
+  - [envs](#encryptdecrypt-envs)
+  - [encoding](#encryptdecrypt-encoding)
+  - [input](#encryptdecrypt-input)
+  - [iv](#encryptdecrypt-iv)
+  - [secret](#encryptdecrypt-secret)
+
+[Encryption and Decryption Limitations](#encryption-and-decryption-limitations)
+  
+[Extending Local .env Files](#extending-local-env-files)
+
+[Fetching Remote .env Files](#fetching-remote-env-files)
 
 [Interpolation](#interpolation)
   - [Interpolation Rules](#interpolation-rules)
@@ -331,9 +349,9 @@ require("@noshot/env").config({ dir: "custom/path/to/directory", paths: [".env",
 
 #### Config encoding
 
-**Default:** `utf-8`
+**Default:** `utf8`
 
-You may specify the encoding [type](https://nodejs.org/api/buffer.html#buffer_buffers_and_character_encodings) of your file containing environment variables.
+You may specify the character encoding [type](https://nodejs.org/api/buffer.html#buffer_buffers_and_character_encodings) of your file containing environment variables.
 
 ```js
 require("@noshot/env").config({ encoding: "latin1" });
@@ -391,10 +409,10 @@ const { parse } = require("@noshot/env");
 // import { parse } from "@noshot/env";
 
 const config = parse(Buffer.from("BASIC=basic")); // will return an object
-console.log(typeof config, config); // object { BASIC : 'basic' }
+console.log(typeof config, config); // object - { BASIC : 'basic' }
 
 const results = parse(readFileSync("path/to/.env.file", { encoding: "utf8" })); // will return an object
-console.log(typeof results, results); // object { KEY : 'value' }
+console.log(typeof results, results); // object - { KEY : 'value' }
 ```
 
 Note: If you're attempting to parse Envs that have already been defined within [`process.env`](https://nodejs.org/docs/latest/api/process.html#process_process_env), then you must pass `parse` an [override](#parse-override) argument.
@@ -410,10 +428,10 @@ const { parse } = require("@noshot/env");
 // import { parse } from "@noshot/env";
 
 const config = parse(Buffer.from("BASIC=basic"), true); // will return an object
-console.log(typeof config, config); // object { BASIC : 'basic' }
+console.log(typeof config, config); // object - { BASIC : 'basic' }
 
 const result = parse(readFileSync("path/to/.env.file", { encoding: "utf8" }), true); // will return an object
-console.log(typeof result, result); // object { OVERRIDEKEY : 'value' }
+console.log(typeof result, result); // object - { OVERRIDEKEY : 'value' }
 ```
 
 ### Parse Rules
@@ -455,7 +473,7 @@ const { config, load } = require("@noshot/env");
 // import { config, load } from "@noshot/env";
 
 const configArgs = load("development"); // will return an object of config arguments
-console.log(typeof configArgs, configArgs) // object { paths: ".env.dev", debug: true }
+console.log(typeof configArgs, configArgs) // object - { paths: ".env.dev", debug: true }
 config(configArgs) // parses .env.dev and assigns it to process.env
 ```
 
@@ -468,13 +486,142 @@ const { config, load } = require("@noshot/env");
 // import { config, load } from "@noshot/env";
 
 const configArgs = load("development", "path/to/custom/directory"); // will return an object of config arguments
-console.log(typeof configArgs, configArgs) // object { paths: ".env.dev", debug: true }
+console.log(typeof configArgs, configArgs) // object - { paths: ".env.dev", debug: true }
 config(configArgs) // parses .env.dev and assigns it to process.env
 ```
 
-## Extending .env Files
+## Decrypt Method
 
-Envs can be extended by adding `# extends:` __magic comments__ followed by `absolute/path/to/.env`. These __magic comments__ can be stacked within a single `.env.*` file:
+If you wish to manaully decrypt an encrypted string, then the decrypt method will parse the encrypted string and return an `Object` with `decryptedEnvs` as a single string of `KEY=value` pairs and a `decryptedResult` as either decrypted parsed `JSON` or a decrypted `Buffer`.
+
+The `decrypt` method accepts a single `Object` argument with the following **required** properties (see [Encryption and Decryption Arguments](#encryption-and-decryption-arguments) for more details): 
+```js
+{ 
+  algorithm: string, 
+  envs: string (encrypted), 
+  encoding: BufferEncoding,
+  input: Encoding,
+  iv: string,
+  secret: CipherKey
+}
+```
+
+Example:
+```js
+const env = require("@noshot/env");
+// import env from "@noshot/env";
+
+const result = env.decrypt({ 
+  algorithm: "aes-256-cbc", 
+  envs: "b8cb1867e4a8248c839db9cb0f1e1d", 
+  encoding: "utf8", 
+  input: "hex", 
+  iv: "05c6f2c47de0ecfe", 
+  secret: "abcdefghijklmnopqrstuv1234567890" 
+});
+
+console.log(typeof decryptedEnvs, result.decryptedEnvs); // string - a single string of "KEY=value" pairs
+console.log(typeof decryptedResult, result.decryptedResult); // object - { "KEY": "VALUE" } as JSON object
+// console.log(typeof decryptedResult, result.decryptedResult); // object - <Buffer xx xx xx ...etc>
+```
+
+## Encrypt Method
+
+If you wish to manaully encrypt a flat stringified JSON object or a Buffer, then the encrypt method will encrypt the string/Buffer and return an `Object` with `encryptedEvs` and an [`iv`](#encryptdecrypt-iv).
+
+The `encrypt` method accepts a single `Object` argument with the following **required** properties (see [Encryption and Decryption Arguments](#encryption-and-decryption-arguments) for more details): 
+```js
+{ 
+  algorithm: string, 
+  envs: string (stringified JSON object) | Buffer, 
+  encoding: BufferEncoding,
+  input: Encoding,
+  secret: CipherKey
+}
+```
+
+Example:
+```js
+const env = require("@noshot/env");
+// import env from "@noshot/env";
+
+const result = env.encrypt({ 
+  algorithm: "aes-256-cbc", 
+  envs: JSON.stringify({ "KEY": "value" }), 
+  encoding: "utf8", 
+  input: "hex", 
+  secret: "abcdefghijklmnopqrstuv1234567890" 
+});
+
+console.log(typeof encryptedEvs, result.encryptedEvs); // string - a single encrypted string
+console.log(typeof iv, result.iv); // string - a random encryption/decryption string
+```
+
+## Encryption and Decryption Arguments
+
+Encryption and decryption methods share similar arguments and here's a breakdown of each one:
+
+### Encrypt/Decrypt algorithm
+
+The `algorithm` argument is a `string` that is dependent on OpenSSL. On recent OpenSSL releases, `openssl list -cipher-algorithms` (`openssl list-cipher-algorithms` for older versions of OpenSSL) will display the available cipher algorithms for your version.
+
+### Encrypt/Decrypt envs
+
+The `envs` argument is, depending on the method, either a stringified JSON object or a Buffer for the [encrypt method](#encrypt-method); or, a single encrypted string of Envs for the [decrypt method](#decrypt-method).
+
+Encrypt (JSON string):
+```js
+const jsonString = JSON.stringify({ "KEY": "value" });
+```
+Encrypt (Buffer):
+```js
+const buf = Buffer.from("KEY=value");
+```
+
+Decrypt (a stringified value derived from the encrypt method):
+```
+b8cb1867e4a8248c839db9cb0f1e1d
+```
+
+### Encrypt/Decrypt encoding
+
+Both methods expect the `encoding` argument to be a `string` type of character [BufferEncoding](https://nodejs.org/api/buffer.html#buffer_buffers_and_character_encodings).
+
+### Encrypt/Decrypt input
+
+Both methods expect the `input` argument to be a `string` type of either `base64` or `hex`.
+
+### Encrypt/Decrypt iv
+
+The `iv`, or [Initialization Vector](https://en.wikipedia.org/wiki/Initialization_vector), is a randomly generated string that is used to encrypt or decrypt a single string. Since it's randomly generated and unique to when it was created, ideally, it should be stored on a disk inaccessible to the source machine. Missplacing or forgetting the `iv` will mean that you have to regenerate a new encrypted string to retrieve a new iv. This `iv` should **never** be commited to version control!
+
+### Encrypt/Decrypt secret
+
+The `secret` should be a randomly generated [CipherKey (see `key`)](https://nodejs.org/api/crypto.html#crypto_crypto_createcipheriv_algorithm_key_iv_options) that is one byte in length and is used to encrypt or decrypt a single string. This `secret` should **never** be commited to version control!
+
+
+### Encryption and Decryption Limitations
+
+Due to the decryption method converting stringified JSON Envs to a non-standard format: `KEY=value`, double/single quotes can **NOT** be used in values (there's no performant way to only remove surrounding quotes from a `"KEY"` and a `'"value"'` without splitting key-value pairs into individual strings, removing the extraneous surrounding quotes, then rechunking them into pairs). Instead, it's recommended that you use a Buffer to retain quotes:
+
+For example, instead of using JSON:
+```json
+{
+  "ABC": "123",
+  "DEF": '"   567   "'
+}
+```
+
+Use a Buffer:
+```js
+const buf = Buffer.from(`ABC=123\nDEF="  567  "`);
+```
+
+On thate note, all interpolated values that follow the [interpolation rules](#interpolation-rules) are supported.
+
+## Extending Local .env Files
+
+Local `.env.*` file can be extended by adding `# extends:` __magic comments__ followed by `absolute/path/to/.env`. These __magic comments__ can be stacked within a single `.env.*` file:
 
 **.env.example**
 ```dosini
@@ -517,6 +664,83 @@ MESSAGE=Hello World
 ```
 
 ⚠️ Please note that extending `.env.*` files that don't exist will silently fail.
+
+## Fetching Remote .env Files
+
+⚠️ Support for this feature is in beta. It utilizes the [curl command](https://www.tutorialspoint.com/unix_commands/curl.htm) within a bash script which requires a Unix based operating system and/or Windows 10 v1803+. For now, this package expects the response body from the remote url to be encrypted plain text.
+
+Envs can be fetched by adding `# uses:` __magic comments__ followed by 6 arguments with spaces between them (**do NOT use new lines, only spaces, and they must be defined in this order**):
+
+```
+remoteurl: string 
+algorithm: string
+input: Encoding
+encoding: BufferEncoding
+secretkey: string
+iv: string
+```
+
+For example:
+
+**remote url**
+```
+https://domain.com/encryptedJSON.txt
+```
+
+[**algorithm**](#encryptdecrypt-algorithm)
+```
+aes-256-cbc
+```
+
+[**input**](#encryptdecrypt-input)
+```
+hex
+```
+
+[**encoding**](#encryptdecrypt-encoding)
+```
+utf8
+```
+
+[**secret**](#encryptdecrypt-secret)
+```
+abcdefghijklmnopqrstuv1234567890
+```
+
+[**iv**](#encryptdecrypt-iv)
+```
+05c6f2c47de0ecfe
+```
+
+**JSON Object**
+```json
+{
+  "ABC": "123",
+  "DEF": "678",
+  "HIJ": "$ABC$DEF"
+}
+```
+
+**encryptedJSON.txt**
+```
+2ad5a38779ca444fe63773ed3771b6d9d52ceb7c6672823be594879d5dba50132f13ef647e2a69060e7e5f0f296c6fd3
+```
+
+**.env.example**
+```dosini
+# uses: https://domain.com/encryptedJSON.txt aes-256-cbc hex utf8 abcdefghijklmnopqrstuv1234567890 05c6f2c47de0ecfe
+REMOTEFILE=true
+```
+
+Output:
+```dosini
+ABC=123
+DEF=456
+HIJ=123456
+REMOTE_FILE=true
+```
+
+⚠️ Please note that fetching `.env.*` files from an invalid URL will silently fail.
 
 ## Interpolation
 
@@ -623,18 +847,50 @@ On the same note, most CI (continous integration) services like Github Actions a
 Yes! You can import submodules directly by their name:
 
 ```js
+// ASSIGN (CJS - named export is different!)
+const { assignEnvs } = require("@noshot/env/assign");
 const assign = require("@noshot/env/assign").default;
-// import assign from "@noshot/env/assign";
+// ASSIGN (ESM)
+import assign from "@noshot/env/assign";
+import assign from "@noshot/env/esm/assign";
 
+// CONFIG (CJS)
+const { config } = require("@noshot/env/config");
 const config = require("@noshot/env/config").default;
-// import config from "@noshot/env/config";
+// CONFIG (ESM)
+import config from "@noshot/env/config";
+import config from "@noshot/env/esm/config";
 
+// DECRYPT (CJS)
+const { decrypt } = require("@noshot/env/decrypt");
+const decrypt = require("@noshot/env/decrypt").default;
+// DECRYPT (ESM)
+import decrypt from "@noshot/env/decrypt";
+import decrypt from "@noshot/env/esm/decrypt";
+
+// ENCRYPT (CJS)
+const { encrypt } = require("@noshot/env/encrypt");
+const encrypt = require("@noshot/env/encrypt").default;
+// ENCRYPT (ESM)
+import encrypt from "@noshot/env/encrypt";
+import encrypt from "@noshot/env/esm/encrypt";
+
+// LOAD (CJS)
+const { load } = require("@noshot/env/load");
 const load = require("@noshot/env/load").default;
-// import load from "@noshot/env/load";
+// LOAD (ESM)
+import load from "@noshot/env/load";
+import load from "@noshot/env/esm/load";
 
+// PARSE (CJS)
+const { parse } = require("@noshot/env/parse");
 const parse = require("@noshot/env/parse").default;
-// import parse from "@noshot/env/parse";
+// PARSE (ESM)
+import parse from "@noshot/env/parse";
+import parse from "@noshot/env/esm/parse";
 ```
+
+⚠️ Please note that for CommonJS imports (`require`) you'll need to import the `default` property for *default* exports. Unfortunately, this is a limitation of mixing ESM (which automatically imports `default`) and CJS imports (which doesn't). Alternatively, you can import (`require`) the named export instead.
 
 ### How does @noshot/env work and will it override already set or predefined variables?
 

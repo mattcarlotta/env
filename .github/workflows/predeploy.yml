@@ -57,6 +57,8 @@ jobs:
         id: tests
         if: steps.linttypes.exit_code == 0
         run: yarn t
+        env:
+          CI: true
 
       - name: Create CJS Build
         id: buildcjs
