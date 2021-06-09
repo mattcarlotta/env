@@ -1,4 +1,4 @@
-import crypto from "crypto";
+import { createCipheriv, randomBytes } from "crypto";
 import type { CryptOptions, EncryptResult } from "../index";
 
 /**
@@ -17,9 +17,9 @@ export default function encrypt({
   input,
   secret
 }: CryptOptions): EncryptResult {
-  const iv = crypto.randomBytes(16).toString("hex").slice(0, 16);
+  const iv = randomBytes(16).toString("hex").slice(0, 16);
 
-  const encrypter = crypto.createCipheriv(algorithm, secret, iv);
+  const encrypter = createCipheriv(algorithm, secret, iv);
 
   const encryptedEvs = encrypter
     .update(envs, encoding, input)

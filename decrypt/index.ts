@@ -1,4 +1,4 @@
-import crypto from "crypto";
+import { createDecipheriv } from "crypto";
 import type { DecryptOptions, DecryptResult } from "../index";
 
 /**
@@ -19,7 +19,7 @@ export default function decrypt({
   secret
 }: DecryptOptions): DecryptResult {
   // decrypt string
-  const decrypter = crypto.createDecipheriv(algorithm, secret, iv);
+  const decrypter = createDecipheriv(algorithm, secret, iv);
   const decryptedEnvs = decrypter
     .update(envs, input, encoding)
     .concat(decrypter.final(encoding));
