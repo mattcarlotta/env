@@ -1,9 +1,32 @@
+import type { Encoding } from "crypto";
 import config from "./config";
 import parse from "./parse";
 import load from "./load";
 import assign from "./assign";
 
-export type { Encoding } from "crypto";
+export type { Encoding };
+
+export type CryptOptions = {
+  algorithm: string;
+  envs: string;
+  encoding: Encoding;
+  input: Encoding;
+  secret: string;
+};
+
+export type EncryptResult = {
+  encryptedEvs: string;
+  iv: string;
+};
+
+export type DecryptResult = {
+  decryptedEnvs: string;
+  decryptedJSON: any;
+};
+
+export type DecryptOptions = CryptOptions & {
+  iv: string;
+};
 
 export interface ParsedEnvs {
   [name: string]: string;

@@ -5,6 +5,8 @@ import removeFiles from "@noshot/utils/removeFiles";
     const dirs = [
       "assign",
       "config",
+      "decrypt",
+      "encrypt",
       "fileExists",
       "getFilePath",
       // "importFile",

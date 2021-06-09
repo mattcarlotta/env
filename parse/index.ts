@@ -28,10 +28,10 @@
  */
 import { readFileSync } from "fs";
 import { execSync } from "child_process";
-import crypto from "crypto";
+import decrypt from "../decrypt";
 import { logWarning } from "../log";
 import fileExists from "../fileExists";
-import type { Encoding, Option, ParsedEnvs } from "../index";
+import type { DecryptOptions, Option, ParsedEnvs } from "../index";
 
 /**
  * Parses a string or buffer of Envs into an object.
@@ -39,7 +39,7 @@ import type { Encoding, Option, ParsedEnvs } from "../index";
  * @param src - contents to be parsed (string | Buffer)
  * @param override - allows extracted Envs to be parsed regardless if `process.env` has the properties defined (boolean | string)
  * @returns a single object of all { key: value } pairs from `src`
- * @example parse(Buffer.from("JUSTICE=league\n"))
+ * @example parse(Buffer.from("JUSTICE=league\n"));
  */
 export default function parse(
   src: string | Buffer,
@@ -129,7 +129,7 @@ export default function parse(
     }
 
     if (!keyValueArr) {
-      // finds matching '# uses: remoteurl, algo, key, iv, input, output'
+      // finds matching '# uses: remoteurl, algorithm, secret, iv, input, encoding'
       keyValueArr = keyValues[i].match(/(?<=# uses: ).*/g);
 
       // checks if there's a match
@@ -137,31 +137,24 @@ export default function parse(
         const [envRemotePath] = keyValueArr;
 
         // splits string by space
-        const [remoteurl, algo, key, iv, input, output] =
+        const [remoteurl, algorithm, secret, iv, input, encoding] =
           envRemotePath.split(" ");
 
-        // fetch encrypted text file from remoteurl
-        const result = interpolate(`$(curl ${remoteurl})`);
+        // fetch encrypted string from remoteurl
+        const envs = interpolate(`$(curl ${remoteurl})`);
 
-        if (result && typeof result === "string") {
-          // decrypt text file
-          const decrypter = crypto.createDecipheriv(algo, key, iv);
-          const decryptedEnvs = decrypter
-            .update(result, input as Encoding, output as Encoding)
-            .concat(decrypter.final(output as BufferEncoding));
-
-          const envValues = decryptedEnvs
-            // remove first "{" and last "}"
-            .replace(/^\{|\}$/gm, "")
-            // replace commas with new lines
-            .replace(/,/g, "\n")
-            // replace all quotes
-            .replace(/["']/g, "")
-            // replace first occurence of ":" to "= " for each line
-            .replace(/^([^:]*?)\s*:\s*/gm, "$1=");
+        if (envs && typeof envs === "string") {
+          const { decryptedEnvs } = decrypt({
+            algorithm,
+            encoding,
+            envs,
+            input,
+            iv,
+            secret
+          } as DecryptOptions);
 
           // and assign it to extracted
-          assign(extracted, parse(envValues));
+          assign(extracted, parse(decryptedEnvs));
         }
 
         // remove extension value

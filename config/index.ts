@@ -12,7 +12,7 @@ import type { ConfigOptions, ConfigOutput, ParsedEnvs } from "../index";
  *
  * @param options - accepts: { `dir`: string, `paths`: string | string[], `encoding`: BufferEncoding, `override`: boolean | string, `debug`: boolean | string }
  * @returns a single object with `parsed` and `extracted` Envs as { KEY: "value" } pairs
- * @example config({ dir: "example", paths: ".env" })
+ * @example config({ dir: "example", paths: ".env" });
  */
 export default function config(options?: ConfigOptions): ConfigOutput {
   // default config options
