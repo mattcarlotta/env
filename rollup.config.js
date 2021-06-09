@@ -21,7 +21,7 @@ export default [
     preserveModules: true,
     input: ["index.ts"],
     output: [{ dir: "esm", format: "esm", entryFileNames: "[name].mjs" }],
-    external: ["fs", "child_process", "path"],
+    external: ["fs", "child_process", "crypto", "path"],
     plugins: [
       typescript({ tsconfig: "./ts/tsconfig.esm.json" }),
       terser(terserOptions)
