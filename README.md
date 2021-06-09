@@ -60,8 +60,6 @@ Heavily inspired by [dotenv](https://github.com/motdotla/dotenv) and [dotenv-exp
 
 [Usage](#usage)
 
-[Examples](https://github.com/no-shot/env-examples)
-
 [Env Configuration File](#env-configuration-file)
 
 [CLI Options](#cli-options)
