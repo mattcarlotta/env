@@ -46,6 +46,8 @@ Heavily inspired by [dotenv](https://github.com/motdotla/dotenv) and [dotenv-exp
 
 ✔️ Supports [fetching remote .env files](#fetching-remote-env-files)
 
+✔️ Supports Env [encryption](#encrypt-method) and [decryption](#decrypt-method)
+
 ✔️ Supports Env [interpolation](#interpolation)
 
 ✔️ Supports Env [preloading](#preload)
@@ -496,7 +498,7 @@ The `decrypt` method accepts a single `Object` argument with the following **req
 ```js
 { 
   algorithm: string, 
-  envs: string, 
+  envs: string (encrypted), 
   encoding: BufferEncoding,
   input: Encoding,
   iv: string,
@@ -530,7 +532,7 @@ The `encrypt` method accepts a single `Object` argument with the following **req
 ```js
 { 
   algorithm: string, 
-  envs: string, 
+  envs: string (stringified JSON), 
   encoding: BufferEncoding,
   input: Encoding,
   secret: CipherKey
@@ -560,7 +562,7 @@ Encryption and decryption methods share similar arguments, here's a breakdown of
 
 ### Encrypt/Decrypt algorithm
 
-The `algorithm` argument is a `string` that is dependent on OpenSSL, see list below for examples. On recent OpenSSL releases, `openssl list -cipher-algorithms` (`openssl list-cipher-algorithms` for older versions of OpenSSL) will display the available cipher algorithms for your version.
+The `algorithm` argument is a `string` that is dependent on OpenSSL. On recent OpenSSL releases, `openssl list -cipher-algorithms` (`openssl list-cipher-algorithms` for older versions of OpenSSL) will display the available cipher algorithms for your version.
 
 ### Encrypt/Decrypt envs
 
@@ -660,27 +662,27 @@ For example:
 https://domain.com/encryptedJSON.txt
 ```
 
-**algorithm** (see list below)
+[**algorithm**](#encryptdecrypt-algorithm)
 ```
 aes-256-cbc
 ```
 
-**secret key**
+[**secret**](#encryptdecrypt-secret)
 ```
 abcdefghijklmnopqrstuv1234567890
 ```
 
-**[iv (Initialization Vector)](https://en.wikipedia.org/wiki/Initialization_vector)**
+[**iv**](#encryptdecrypt-iv)
 ```
 05c6f2c47de0ecfe
 ```
 
-**input (type of encoding used to encrypt the JSON object)**
+[**input**](#encryptdecrypt-input)
 ```
 hex
 ```
 
-**[output (type of encoding to decrypt the response)](https://nodejs.org/api/buffer.html#buffer_buffers_and_character_encodings)**
+[**encoding**](#encryptdecrypt-encoding)
 ```
 utf8
 ```
@@ -824,12 +826,20 @@ const assign = require("@noshot/env/assign").default;
 const config = require("@noshot/env/config").default;
 // import config from "@noshot/env/config";
 
+const decrypt = require("@noshot/env/decrypt").default;
+// import decrypt from "@noshot/env/decrypt";
+
+const encrypt = require("@noshot/env/encrypt").default;
+// import encrypt from "@noshot/env/encrypt";
+
 const load = require("@noshot/env/load").default;
 // import load from "@noshot/env/load";
 
 const parse = require("@noshot/env/parse").default;
 // import parse from "@noshot/env/parse";
 ```
+
+⚠️ Please note that for CommonJS imports (`require`) you'll need to import the `default` property. Unfortunately, this is a limitation of mixing ESM (which automatically imports `default`) and CJS imports (which doesn't).
 
 ### How does @noshot/env work and will it override already set or predefined variables?
 
