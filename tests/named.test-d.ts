@@ -19,7 +19,7 @@ expectType<ParsedEnvs>(extracted);
 expectType<string>(extracted["BASE"]);
 
 // DECRYPT
-const { decryptedEnvs, decryptedJSON} = decrypt({
+const { decryptedEnvs, decryptedResult} = decrypt({
   algorithm: "aes-256-cbc",
   envs: "d4b6baef6ae9313a17b3f736a4e28ba35f4f23a74397a06f75fefe7acc777b81570a12ccee82ff4e2c05f148dce3b17c", encoding: "utf8",
   input: "hex",
@@ -28,7 +28,7 @@ const { decryptedEnvs, decryptedJSON} = decrypt({
 });
 
 expectType<string>(decryptedEnvs);
-expectType<any>(decryptedJSON);
+expectType<any>(decryptedResult);
 
 // ENCRYPT
 const envString = JSON.stringify({
