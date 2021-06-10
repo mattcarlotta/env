@@ -21,7 +21,7 @@ export function load(env: string, dir?: string): ConfigOptions {
 
     if (!fileExists(configPath))
       throw String(
-        `Unable to locate an '${configName}' file in the specified directory!`
+        `Unable to locate an ${configName} file in the specified directory!`
       );
 
     // if (!fileExists(configPath)) {
@@ -43,7 +43,7 @@ export function load(env: string, dir?: string): ConfigOptions {
       !Object.prototype.hasOwnProperty.call(config, env)
     )
       throw String(
-        `Unable to locate a '${env}' configuration within '${configName}'!`
+        `Unable to locate a '${env}' configuration within the ${configName}!`
       );
 
     return config[env] as ConfigOptions;

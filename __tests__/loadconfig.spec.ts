@@ -6,7 +6,7 @@ jest.mock("../log", () => ({
   logWarning: jest.fn()
 }));
 
-it("loads and parses an 'env.config.json' file and registers ENVs when the package is imported", async () => {
+it("loads and parses an env.config.json file and registers ENVs when the package is imported", async () => {
   expect(process.env.BASE).toBeUndefined();
   process.env.LOAD_CONFIG = "test";
 
