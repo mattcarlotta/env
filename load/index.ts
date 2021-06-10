@@ -43,7 +43,7 @@ export function load(env: string, dir?: string): ConfigOptions {
       !Object.prototype.hasOwnProperty.call(config, env)
     )
       throw String(
-        `Unable to locate a '${env}' configuration within '${configName}'!`
+        `Unable to locate a '${env}' configuration within ${configName}!`
       );
 
     return config[env] as ConfigOptions;

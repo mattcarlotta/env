@@ -105,64 +105,6 @@ export function parse(src: string | Buffer, override?: Option): ParsedEnvs {
     // finds matching "KEY' and 'VAL' in 'KEY=VAL'
     let keyValueArr = KEYVAL.match(/^\s*([\w.-]+)\s*=\s*(.*)?\s*$/);
 
-    // finds matching '# extends: path/to/.env'
-    if (!keyValueArr) {
-      keyValueArr = KEYVAL.match(/(?<=# extends: ).*/g);
-
-      // checks if there's a matching extension
-      if (Array.isArray(keyValueArr)) {
-        let extended = {};
-
-        // destructure the path to the env from array
-        const [envPath] = keyValueArr;
-
-        // if the file exists, parse it...
-        if (fileExists(envPath))
-          extended = parse(readFileSync(envPath), override);
-
-        // and assign any parsed Envs to extracted
-        assign(extracted, extended);
-
-        // remove "extends" line
-        keyValueArr = null;
-      }
-    }
-
-    if (!keyValueArr) {
-      // finds matching '# uses: remoteurl, algorithm, input, encoding, secret, iv'
-      keyValueArr = KEYVAL.match(/(?<=# uses: ).*/g);
-
-      // checks if there's a match
-      if (Array.isArray(keyValueArr)) {
-        const [envRemotePath] = keyValueArr;
-
-        // splits string by space
-        const [remoteurl, algorithm, input, encoding, secret, iv] =
-          envRemotePath.split(" ");
-
-        // fetch encrypted string from remoteurl
-        const envs = interpolate(`$(curl -s ${remoteurl})`);
-
-        if (envs && typeof envs === "string") {
-          // decrypt the encrypted string and convert stringified JSON to Env "KEY=value" pairs
-          const { decryptedEnvs } = decrypt({
-            algorithm,
-            encoding,
-            envs,
-            input,
-            iv,
-            secret
-          } as DecryptOptions);
-
-          // assign Envs to extracted
-          assign(extracted, parse(decryptedEnvs));
-        }
-
-        // remove "uses" line
-        keyValueArr = null;
-      }
-    }
-
     if (keyValueArr) {
       const key = keyValueArr[1];
 
@@ -186,6 +128,53 @@ export function parse(src: string | Buffer, override?: Option): ParsedEnvs {
         // set value to extracted object
         extracted[key] = value;
       }
+
+      continue;
+    }
+
+    // finds matching '# extends: path/to/.env'
+    keyValueArr = KEYVAL.match(/(?<=# extends: ).*/g);
+
+    // checks if there's a matching extension
+    if (keyValueArr) {
+      // if the file exists, parse it...
+      // and assign any parsed Envs to extracted
+      if (fileExists(keyValueArr[0]))
+        assign(extracted, parse(readFileSync(keyValueArr[0]), override));
+
+      // skip to next iteration
+      continue;
+    }
+
+    // finds matching '# uses: remoteurl, algorithm, input, encoding, secret, iv'
+    keyValueArr = KEYVAL.match(/(?<=# uses: ).*/g);
+
+    // checks if there's a match
+    if (keyValueArr) {
+      // splits string by space
+      const [remoteurl, algorithm, input, encoding, secret, iv] =
+        keyValueArr[0].split(" ");
+
+      // fetch encrypted string from remoteurl
+      const envs = interpolate(`$(curl -s ${remoteurl})`);
+
+      if (envs && typeof envs === "string") {
+        // decrypt the encrypted string and convert stringified JSON to Env "KEY=value" pairs
+        const { decryptedEnvs } = decrypt({
+          algorithm,
+          encoding,
+          envs,
+          input,
+          iv,
+          secret
+        } as DecryptOptions);
+
+        // assign Envs to extracted
+        assign(extracted, parse(decryptedEnvs));
+      }
+
+      // skip to next iteration
+      continue;
     }
   }
 

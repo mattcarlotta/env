@@ -13,7 +13,7 @@ describe("Invalid Config", () => {
     require("../index");
 
     expect(logWarning).toHaveBeenCalledWith(
-      "Unable to locate a 'development' configuration within 'env.config.json'!"
+      "Unable to locate a 'development' configuration within env.config.json!"
     );
   });
 });

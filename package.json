@@ -1,6 +1,6 @@
 {
   "name": "@noshot/env",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "Loading byte sized ENVs made simple.",
   "main": "index.js",
   "module": "esm/index.mjs",
