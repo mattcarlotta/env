@@ -21,7 +21,7 @@ export function load(env: string, dir?: string): ConfigOptions {
 
     if (!fileExists(configPath))
       throw String(
-        `Unable to locate an '${configName}' file in the specified directory!`
+        `Unable to locate an ${configName} file in the specified directory!`
       );
 
     // if (!fileExists(configPath)) {
