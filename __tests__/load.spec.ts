@@ -24,7 +24,7 @@ describe("Load Method", () => {
     load("dev", "tests");
 
     expect(logWarning).toHaveBeenCalledWith(
-      "Unable to locate a 'dev' configuration within env.config.json!"
+      "Unable to locate a 'dev' configuration within the env.config.json!"
     );
   });
 
