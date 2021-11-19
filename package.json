@@ -1,6 +1,6 @@
 {
   "name": "@noshot/env",
-  "version": "2.1.1",
+  "version": "3.0.0",
   "description": "Loading byte sized ENVs made simple.",
   "main": "index.js",
   "module": "esm/index.mjs",
@@ -63,9 +63,9 @@
     "r:b": "npm run r && npm run r:types",
     "r:esm": "rimraf esm",
     "r:types": "ts-node ./utils/removeTypes.ts",
-    "t": "jest --config ./jest.json",
-    "t:cov": "jest --config ./jest.json --coverage",
-    "t:watch": "jest --config ./jest.json --watchAll"
+    "t": "jest",
+    "t:cov": "jest --coverage",
+    "t:watch": "jest --watchAll"
   },
   "tsd": {
     "directory": "tests",
@@ -101,34 +101,32 @@
     "url": "https://github.com/no-shot/env/issues"
   },
   "engines": {
-    "node": ">=12"
+    "node": ">=14"
   },
   "devDependencies": {
     "@noshot/utils": "^1.0.1",
-    "@types/enzyme": "^3.10.8",
-    "@types/jest": "^26.0.23",
-    "@types/node": "^15.12.2",
-    "@typescript-eslint/eslint-plugin": "^4.26.1",
-    "@typescript-eslint/parser": "^4.26.1",
-    "browserslist": "^4.16.6",
-    "enzyme": "^3.11.0",
-    "eslint": "^7.28.0",
-    "eslint-config-airbnb-base": "^14.2.1",
+    "@types/jest": "^27.0.3",
+    "@types/node": "^16.11.8",
+    "@typescript-eslint/eslint-plugin": "^5.4.0",
+    "@typescript-eslint/parser": "^5.4.0",
+    "browserslist": "^4.18.1",
+    "eslint": "^8.2.0",
+    "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-prettier": "^8.3.0",
-    "eslint-plugin-import": "^2.23.4",
-    "eslint-plugin-jest": "^24.3.6",
-    "eslint-plugin-prettier": "^3.4.0",
-    "jest": "^27.0.4",
-    "prettier": "^2.3.1",
+    "eslint-plugin-import": "^2.25.3",
+    "eslint-plugin-jest": "^25.2.4",
+    "eslint-plugin-prettier": "^4.0.0",
+    "jest": "^27.3.1",
+    "prettier": "^2.4.1",
     "rimraf": "^3.0.2",
-    "rollup": "^2.51.1",
+    "rollup": "^2.60.0",
     "rollup-plugin-terser": "^7.0.2",
-    "rollup-plugin-typescript2": "^0.30.0",
-    "terser": "^5.7.0",
-    "ts-jest": "^27.0.3",
-    "ts-node": "^10.0.0",
-    "tsd": "^0.17.0",
-    "typescript": "^4.3.2"
+    "rollup-plugin-typescript2": "^0.31.0",
+    "terser": "^5.10.0",
+    "ts-jest": "^27.0.7",
+    "ts-node": "^10.4.0",
+    "tsd": "^0.19.0",
+    "typescript": "^4.5.2"
   },
   "dependencies": {},
   "directories": {

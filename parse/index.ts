@@ -79,7 +79,7 @@ export function parse(src: string | Buffer, override?: Option): ParsedEnvs {
               value = execSync(stripped, {
                 stdio: "pipe"
               }).toString();
-            } catch (err) {
+            } catch (err: any) {
               logWarning(`\x1b[31m${err.message}\x1b[0m`);
             }
           } else {

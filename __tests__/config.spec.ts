@@ -113,6 +113,23 @@ describe("Config Method", () => {
     expect(logWarning).not.toHaveBeenCalled();
   });
 
+  it("accepts a required argument to check for required values from extracted Envs", () => {
+    expect(() =>
+      config({ paths: "tests/.env.required", required: ["REQUIRED"] })
+    ).not.toThrowError();
+  });
+
+  it("throws an error when required values are missing from extracted Envs", () => {
+    expect(() =>
+      config({
+        paths: "tests/.env.required",
+        required: ["THIS_IS_REQUIRED", "THIS_IS_ALSO_REQUIRED"]
+      })
+    ).toThrowError(
+      "[env] The following Envs were marked as required: 'THIS_IS_REQUIRED', 'THIS_IS_ALSO_REQUIRED', but they are undefined after extraction!"
+    );
+  });
+
   describe("Interpolation", () => {
     let extracted: ParsedEnvs;
     beforeAll(() => {

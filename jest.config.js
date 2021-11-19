@@ -1,4 +1,4 @@
-{
+module.exports = {
   "testEnvironment": "node",
   "moduleDirectories": ["<rootDir>", "node_modules"],
   "transform": {
@@ -13,5 +13,5 @@
     "<rootDir>/types",
     "<rootDir>/utils"
   ],
-  "collectCoverageFrom": ["**/*.ts", "!**/*d.ts", "!utils/*.ts"]
+  "collectCoverageFrom": ["**/*.ts", "!**/*d.ts", "!utils/*.ts", "!importFile/*.ts"]
 }

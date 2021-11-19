@@ -47,6 +47,7 @@ export interface ConfigOptions {
   encoding?: BufferEncoding;
   override?: Option;
   debug?: Option;
+  required?: Array<string>;
 }
 
 export interface ConfigOutput {
@@ -58,8 +59,7 @@ export interface ConfigOutput {
  * Immediately loads a single or multiple `.env` file contents into {@link https://nodejs.org/api/process.html#process_process_env | `process.env`} when the package is preloaded or imported.
  */
 (function (): void {
-  const { env } = process;
-  const { LOAD_CONFIG } = env;
+  const { LOAD_CONFIG } = process.env;
 
   // checks if LOAD_CONFIG is defined and assigns config options
   if (LOAD_CONFIG) {
