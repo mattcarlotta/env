@@ -52,6 +52,8 @@ Heavily inspired by [dotenv](https://github.com/motdotla/dotenv) and [dotenv-exp
 
 ✔️ Supports Env [preloading](#preload)
 
+✔️ Supports marking Envs as [required](#config-required)
+
 ✔️ Supports loading Envs via an [Env Configuration File](#env-configuration-file)
 
 ## Quick Links
@@ -74,6 +76,7 @@ Heavily inspired by [dotenv](https://github.com/motdotla/dotenv) and [dotenv-exp
     - [encoding](#config-encoding)
     - [override](#config-override)
     - [debug](#config-debug)
+    - [required](#config-required)
 
 [Parse Method](#parse-method)
   - [Argument Options](#parse-argument-options)
@@ -223,7 +226,8 @@ By defining a `LOAD_CONFIG` variable, this will let `@noshot/env` know you'd lik
   "development": {
     "debug": true,
     "paths": [".env.base", ".env.dev"],
-    "override": true
+    "override": true,
+    "required": ["API_KEY"]
   },
   "production": {
     "paths": ".env.prod",
@@ -284,6 +288,7 @@ The `config` method accepts a single `Object` argument with the following proper
   encoding?: BufferEncoding,
   override?: boolean | string,
   debug?: boolean | string
+  required?: string[]
 }
 ```
 
@@ -385,6 +390,21 @@ require("@noshot/env").config({ debug: true });
 // import { config } from "@noshot/env";
 // config({ debug: true });
 ```
+
+#### Config required
+
+**Default:** `[]`
+
+You may mark Envs as required by passing an array of required Env keys.
+
+```js
+require("@noshot/env").config({ required: ["SECRET_KEY", "API_KEY", ...etc] });
+
+// import { config } from "@noshot/env";
+// config({ required: ["SECRET_KEY", "API_KEY", ...etc] });
+```
+
+⚠️ Please note that Envs marked as required will only apply to the **extracted** Envs and not to Envs within [`process.env`](https://nodejs.org/docs/latest/api/process.html#process_process_env). If any Envs marked as required are undefined after extraction, then an error will be thrown with the missing Env keys.
 
 ## Parse Method
 
@@ -608,7 +628,7 @@ For example, instead of using JSON:
 ```json
 {
   "ABC": "123",
-  "DEF": '"   567   "'
+  "DEF": "   567   "
 }
 ```
 
@@ -973,4 +993,3 @@ import env from "@noshot/env/esm";
 ## Contributing Guide
 
 See [CONTRIBUTING.md](CONTRIBUTING.md)
-

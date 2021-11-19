@@ -47,7 +47,7 @@ export function load(env: string, dir?: string): ConfigOptions {
       );
 
     return config[env] as ConfigOptions;
-  } catch (error) {
+  } catch (error: any) {
     logWarning(error.toString());
     return {} as ConfigOptions;
   }

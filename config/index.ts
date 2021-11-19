@@ -21,6 +21,7 @@ export function config(options?: ConfigOptions): ConfigOutput {
   let debug: ConfigOptions["debug"];
   let override: ConfigOptions["override"];
   let encoding: ConfigOptions["encoding"] = "utf8";
+  let required: ConfigOptions["required"] = [];
 
   // override default options with config options arguments
   if (options) {
@@ -29,6 +30,7 @@ export function config(options?: ConfigOptions): ConfigOutput {
     debug = options.debug;
     encoding = options.encoding || encoding;
     override = options.override;
+    required = options.required;
   }
 
   // split paths into array of strings
@@ -52,9 +54,24 @@ export function config(options?: ConfigOptions): ConfigOutput {
       Object.assign(extracted, parsed);
 
       if (debug) logMessage(`Loaded env from ${envPath}`);
-    } catch (err) {
+    } catch (err: any) {
       if (debug) logWarning(`Unable to load ${envPath}: ${err.toString()}.`);
     }
+  }
+
+  if (Array.isArray(required) && required.length) {
+    const undefinedKeyValues: Array<string> = [];
+    for (let i = 0; i < required.length; i += 1) {
+      const key = required[i];
+      if (extracted[key] == null) undefinedKeyValues.push(key);
+    }
+
+    if (undefinedKeyValues.length)
+      throw new Error(
+        `[env] The following Envs were marked as required: ${undefinedKeyValues
+          .map(v => `'${v}'`)
+          .join(", ")}, but they are undefined after extraction!`
+      );
   }
 
   return {

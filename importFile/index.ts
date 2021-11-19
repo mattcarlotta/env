@@ -1,4 +1,3 @@
-/* istanbul ignore file */
 /**
  * A utility function that attempts to `import`/`require` a JavaScript `env.config.(m)js` file.
  *
@@ -8,7 +7,7 @@
 export async function importModule(module: string): Promise<any> {
   try {
     return require(module);
-  } catch (err) {
+  } catch (err: any) {
     if (err.code === "ERR_REQUIRE_ESM") {
       const { default: defaultExport } = await import(module);
       return defaultExport;
