@@ -128,7 +128,7 @@ describe("Config Method", () => {
     });
 
     expect(logError).toHaveBeenCalledWith(
-      "The following Envs were marked as required: 'THIS_IS_REQUIRED', 'THIS_IS_ALSO_REQUIRED', but they are undefined after extraction!"
+      "The following Envs are marked as required: 'THIS_IS_REQUIRED', 'THIS_IS_ALSO_REQUIRED', but they are undefined after all the specified .env files were parsed."
     );
   });
 

@@ -68,9 +68,11 @@ export function config(options?: ConfigOptions): ConfigOutput {
 
     if (undefinedKeyValues.length)
       logError(
-        `The following Envs were marked as required: ${undefinedKeyValues
+        `The following Envs are marked as required: ${undefinedKeyValues
           .map(v => `'${v}'`)
-          .join(", ")}, but they are undefined after extraction!`
+          .join(
+            ", "
+          )}, but they are undefined after all the specified .env files were parsed.`
       );
   }
 

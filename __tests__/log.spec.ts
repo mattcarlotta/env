@@ -26,6 +26,10 @@ describe("Log", () => {
   });
 
   it("throws an error message to the console", () => {
-    expect(() => logError("Example error.")).toThrowError("Example error.");
+    logError("Example error.");
+
+    expect(mockLog).toHaveBeenCalledWith(
+      expect.stringContaining("Example error.")
+    );
   });
 });
