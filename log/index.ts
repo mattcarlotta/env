@@ -23,5 +23,5 @@ export function logWarning(message: string): void {
  * @throws an error message
  */
 export function logError(message: string): void {
-  throw String(`\x1b[41m[env]: ${message}\x1b[0m`);
+  throw String(`[env]: ${message}`);
 }
