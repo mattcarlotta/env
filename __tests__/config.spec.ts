@@ -1,11 +1,12 @@
 import config from "../config/index";
-import { logMessage, logWarning } from "../log";
+import { logError, logMessage, logWarning } from "../log";
 import type { ParsedEnvs } from "../index";
 
 jest.mock("../log", () => ({
   __esModule: true,
   logMessage: jest.fn(),
-  logWarning: jest.fn()
+  logWarning: jest.fn(),
+  logError: jest.fn()
 }));
 
 const root = process.cwd();
@@ -14,6 +15,7 @@ describe("Config Method", () => {
   beforeEach(() => {
     (logMessage as jest.Mock).mockClear();
     (logWarning as jest.Mock).mockClear();
+    (logError as jest.Mock).mockClear();
   });
 
   it("loads a default .env file", () => {
@@ -120,13 +122,13 @@ describe("Config Method", () => {
   });
 
   it("throws an error when required values are missing from extracted Envs", () => {
-    expect(() =>
-      config({
-        paths: "tests/.env.required",
-        required: ["THIS_IS_REQUIRED", "THIS_IS_ALSO_REQUIRED"]
-      })
-    ).toThrowError(
-      "[env] The following Envs were marked as required: 'THIS_IS_REQUIRED', 'THIS_IS_ALSO_REQUIRED', but they are undefined after extraction!"
+    config({
+      paths: "tests/.env.required",
+      required: ["THIS_IS_REQUIRED", "THIS_IS_ALSO_REQUIRED"]
+    });
+
+    expect(logError).toHaveBeenCalledWith(
+      "The following Envs were marked as required: 'THIS_IS_REQUIRED', 'THIS_IS_ALSO_REQUIRED', but they are undefined after extraction!"
     );
   });
 

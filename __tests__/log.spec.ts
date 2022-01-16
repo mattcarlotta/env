@@ -1,4 +1,4 @@
-import { logMessage, logWarning } from "../log";
+import { logError, logMessage, logWarning } from "../log";
 
 const mockLog = jest.fn();
 
@@ -23,5 +23,9 @@ describe("Log", () => {
     expect(mockLog).toHaveBeenCalledWith(
       expect.stringContaining("Example warning.")
     );
+  });
+
+  it("throws an error message to the console", () => {
+    expect(() => logError("Example error.")).toThrowError("Example error.");
   });
 });
