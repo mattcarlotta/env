@@ -15,3 +15,13 @@ export function logMessage(message: string): void {
 export function logWarning(message: string): void {
   console.log(`\x1b[33m[env]: ${message}\x1b[0m`);
 }
+
+/**
+ * A utility function that logs an error message.
+ *
+ * @param message
+ * @throws an error message
+ */
+export function logError(message: string): void {
+  throw String(`\x1b[41m[env]: ${message}\x1b[0m`);
+}

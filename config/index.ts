@@ -3,7 +3,7 @@ import parse from "../parse";
 import assign from "../assign";
 import getFilePath from "../getFilePath";
 import fileExists from "../fileExists";
-import { logMessage, logWarning } from "../log";
+import { logError, logMessage, logWarning } from "../log";
 import type { ConfigOptions, ConfigOutput, ParsedEnvs } from "../index";
 
 /**
@@ -67,8 +67,8 @@ export function config(options?: ConfigOptions): ConfigOutput {
     }
 
     if (undefinedKeyValues.length)
-      throw new Error(
-        `[env] The following Envs were marked as required: ${undefinedKeyValues
+      logError(
+        `The following Envs were marked as required: ${undefinedKeyValues
           .map(v => `'${v}'`)
           .join(", ")}, but they are undefined after extraction!`
       );
