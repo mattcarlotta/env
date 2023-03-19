@@ -7,7 +7,7 @@
     <img src="https://img.shields.io/npm/v/@noshot/env.svg?style=for-the-badge&labelColor=000000">
   </a>
   <a href="https://github.com/no-shot/env/actions?query=workflow%3A%22Publish+Workflow%22">
-    <img src="https://img.shields.io/github/workflow/status/no-shot/env/Publish%20Workflow?style=for-the-badge&labelColor=000000">
+    <img src="https://img.shields.io/github/actions/workflow/status/mattcarlotta/env/publish.yml?branch=main&style=for-the-badge&labelColor=000000">
   </a>
   <a href="https://codecov.io/gh/no-shot/env/branch/main">
     <img src="https://img.shields.io/codecov/c/github/no-shot/env?style=for-the-badge&labelColor=000000">
